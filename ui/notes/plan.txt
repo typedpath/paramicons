@@ -1,0 +1,18 @@
+
+
+facebook / whatsapp integration ? 
+  https://developers.facebook.com/docs/plugins/share-button/#example
+
+facebook, whatsapp integration requires an embedded preview included in posts
+and view urls need to support og:image metatag specifying a jpg image - probably need to introduce:
+user login + save icon (generates jpg version for preview) i.e. a backend !
+
+see here:
+https://developers.facebook.com/docs/sharing/best-practices#images
+
+dynamic og:image meta tag will require server side intervention:
+https://stackoverflow.com/questions/14898673/facebook-scraper-doesnt-load-dynamic-meta-tags
+
+use lambda edge to inject meta data
+https://gist.github.com/furkan3ayraktar/2ba5e34985addc4107dc417399be2b9d
+

@@ -1,0 +1,30 @@
+a random list of useful commands:
+=================================
+
+npx create-react-library param-icons --template typescript
+
+in example
+npm install --save @material-ui/core
+
+// removed: npm install --save material-ui-color-picker
+npm install --save material-ui-color
+
+starting may require :
+  npm install
+  npm run build
+  cd examples
+  rm -fR node_modules
+  npm install
+  npm install @material-ui/core
+  export NODE_OPTIONS=--openssl-legacy-provider
+  npm start
+
+backups / deployment
+    backup aws s3 cp s3://paramicons.testedsoftware.org ../../bak/ --recursive
+
+deployment 
+      aws s3 cp build  s3://paramicons.testedsoftware.org --recursive
+      (from console) create cloud front invalidation /*
+  
+
+  
