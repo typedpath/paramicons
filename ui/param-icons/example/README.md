@@ -7,7 +7,8 @@ You can run `npm install` and then `npm start` to test your package.
 ### running locally from root
 
 ```shell
- npm install npm run build
+ npm install
+ npm run build
  cd example
  npm install
  export NODE_OPTIONS=--openssl-legacy-provider
