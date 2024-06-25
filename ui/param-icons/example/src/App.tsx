@@ -1,159 +1,112 @@
-import { Property, 
-   MetaData, circlyIconMetaData, polarRadialCon2MetaData, polarRadialConMetaData, spiralConMetaData, MultiShapeParams } from 'param-icons';
-import Container from '@material-ui/core/Container';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import React, { useState }  from "react";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Box from "@mui/material/Box";
+import AppBar from "@mui/material/AppBar";
+import Typography from "@mui/material/Typography";
+import IconButton from '@mui/material/IconButton';
+import MenuItem from '@mui/material/MenuItem';
+import Toolbar from '@mui/material/Toolbar';
 
-import React, {useState} from 'react';
-import ColourListSvg from './ColourListSvg';
-import ReactDOMServer from 'react-dom/server';
-import { IconView } from './IconView';
+import {
+  MetaData, blockconMetaData, circlyIconMetaData, polarRadialCon2MetaData, polarRadialConMetaData, spiralConMetaData, MultiShapeParams, Circlycon } from 'param-icons';
+import Edit from './Edit'
 
 
-interface SampleRow {
-   metaData: MetaData
-   selected: boolean 
+function small(p: MultiShapeParams) : MultiShapeParams {
+  p.pageWidth=100;
+  p.pageHeight=100;
+  return p;
 }
 
-const defaultRows: SampleRow[] = [circlyIconMetaData, polarRadialCon2MetaData,polarRadialConMetaData, spiralConMetaData]
-     .map ( mdt =>  {return {
-      metaData: mdt,
-      selected: false
-    }} );
-
-//  <text onClick={onClickEdit} x={x+2.5*unit} y={2*unit/3}>Edit</text>
-
-function rowUI( row: SampleRow, onChange: () => void) : JSX.Element {
-    row.metaData.defaultParams.pageWidth = row.selected?512:100;
-    row.metaData.defaultParams.pageHeight = row.selected?512:100;
-  const onClickEdit = () => {
-    row.selected = !row.selected;
-    onChange();
-  }  
-
-  function sampleSize(ps: MultiShapeParams) : MultiShapeParams{
-ps.pageHeight = 100;
-ps.pageWidth = 100;
-return ps;
-}
-function onClickSample(metaData: MetaData, i: number) : ()=>void {
-   return () => {
-     metaData.defaultParams = {...(metaData.sampleParams[i])};
-     console.log("clicked ", metaData, i);
-     onChange();
+function ui(metaData: MetaData, onClickIn: (metaData: MetaData, ps: MultiShapeParams)=>void) : JSX.Element{
+return <Card variant={"outlined"}>
+<CardContent>
+  <Typography gutterBottom variant="h5" component="h2">
+    {metaData.description}
+  </Typography>
+  <CardContent   sx={{
+          bgcolor: 'background.paper',
+          boxShadow: 1,
+          borderRadius: 2,
+          p: 2,
+          minWidth: 300,
+        }}>{metaData.sampleParams.map ((ps)=>{
+    const onClick = () => {
+      onClickIn(metaData, ps);
     }
+    return <span padding-right= "20" onClick={onClick}>&nbsp;{metaData.render(small(ps))}</span>}
+  )}</CardContent>
+  <Typography variant="body2" color="textSecondary">
+    click to edit
+
+  </Typography>
+</CardContent>
+</Card>
 }
 
-const onClickDownload = () => {
+const metaDatas: MetaData[] = [circlyIconMetaData, polarRadialCon2MetaData, blockconMetaData, polarRadialConMetaData,  spiralConMetaData]
 
-  const renderPs = {...row.metaData.defaultParams} 
-  renderPs.pageHeight=200;
-  renderPs.pageWidth=200;
-
-  const el: JSX.Element = row.metaData.render(renderPs);
-  const strEl: string = ReactDOMServer.renderToStaticMarkup(el);
-
-  const blob = new Blob([strEl]);
-  const fileDownloadUrl = URL.createObjectURL(blob);
-
-  const filename = 'download.svg';
-  const aTag = document.createElement('a');
-  aTag.href = fileDownloadUrl;
-  aTag.download = filename;
-  aTag.click();
-  URL.revokeObjectURL(fileDownloadUrl); 
-
-}  
-
-
-return <React.Fragment>
-    <text>{row.metaData.description}</text>
-    <br/> 
-    <text onClick={onClickEdit}>{ row.selected?"Close Edit":"Edit" }</text>
-    <text> .... </text>
-    <text onClick={onClickDownload}>{ "Download" }</text>
-
-<br/>
-   {[row.metaData.render(row.metaData.defaultParams) ]} 
-   { !row.selected &&  row.metaData.sampleParams.map((ps, i)=> {
-           return <span onClick={onClickSample(row.metaData, i)}>{row.metaData.render(sampleSize(ps))}
-           </span>}  )}
-  <br/>         
-   {row.metaData.sampleParams.map((ps)=><IconView metaData={row.metaData} paramsIn={ps}/> )}        
-
-<form>  
-{ row.selected &&  row.metaData.properties.map((prop, i)=>edit(row.metaData.defaultParams, onChange, prop, ""+i))}
-</form>
-
-</React.Fragment>
-}
+const defaultSelected: {metaData: MetaData, params: MultiShapeParams} | null = null
 
 const App = () => {
-  
-  const [ sampleRows, setSampleRows] = useState(defaultRows);
 
-  const onRowChange = () => {setSampleRows([...sampleRows])}
+  const [ selected, setSelected] = useState<{metaData: MetaData, params: MultiShapeParams} | null>(defaultSelected);
 
-  const ui = <Container>    
+   function onClick(metaDataIn: MetaData, psIn: MultiShapeParams) {
+     console.log("clicked", metaDataIn, psIn)
+     setSelected({metaData: metaDataIn, params: psIn})
+   }
 
-<br/> {sampleRows.map( row=>rowUI(row, onRowChange)  ) }
-<br/>
 
-</Container>
 
-return ui;
+
+function headerIcon() : JSX.Element {
+  const iconSize = 50;
+  if (selected==null) {
+return <Circlycon
+                 pageHeight={iconSize} pageWidth={iconSize} depth={4} decreaseRatio={1.3} margin={0} fillColours={["red", "blue", "yellow", "green"]}/>
+   } else {
+      const params = {...selected.params}
+      params.pageHeight=iconSize;
+      params.pageWidth=iconSize;
+      return  selected.metaData.render(params);
+   }
 }
 
-function editBoolean(params: MultiShapeParams,  onChange: () => void, prop: Property, key: string) : JSX.Element {
-  const isChecked = prop.get(params)
-  console.log(`${prop.name} isChecked`, isChecked);
+const onHome = () => {
+  setSelected(null);
+  window.history.replaceState(null, "Paramicons", "/")
 
-  return <FormControlLabel
-  control={<Checkbox key={key} checked={isChecked} onChange={(e)=>{
-    prop.set(params, e.target.checked)
-   onChange();
-   }} />}
-  label={prop.description}
-/>
 }
 
-function editColourList(params: MultiShapeParams,  onChange: () => void, prop: Property, key: string) : JSX.Element {
-  function onChangeInner(colours: string[]) {
-       prop.set(params, colours);
-       onChange();
-  }
-  
-  return <FormControlLabel key={key}
-  control={<ColourListSvg onChange={onChangeInner}  colours={prop.get(params)}  cRadius={20} />}
-  label={prop.description}
-/>
+return  <Box sx={{ flexGrow: 1 }}>
+<AppBar position="static" >
+<Toolbar>
+<Box display='flex' >
+            {/* whatever is on the left side */}
+            <IconButton
+                size="small"
+                edge="start"
+                color="inherit"
+                aria-label="Home"
+                onClick={onHome}
+                sx={{ml:1}}
+              >
+                {headerIcon()}
+              </IconButton>
+        </Box>
+        <Typography variant="h3" component="div" sx={{ flexGrow: 1, alignSelf: 'center'  }}>
+        Param-Iconz
+          </Typography>
+        <MenuItem onClick={onHome}> Home</MenuItem>
+        </Toolbar>
+</AppBar>
+{selected && <Edit metaData={selected.metaData} params={selected.params}/>}
+{!selected && metaDatas.map(mt=>ui(mt, onClick))}
+
+</Box>
 }
-
-function editText(params: MultiShapeParams,  onChange: () => void, prop: Property, key: string) : JSX.Element {
-  const onClick = () => {   
-    params.highlightedProperty = prop.name == params.highlightedProperty ? '' : prop.name; 
-    onChange();     
-    console.log('onClick property ', prop.name )
-  } 
-  return <TextField onClick={onClick}  key={key}  variant={"outlined"} id="outlined-basic" disabled={false} label={prop.description} value={prop.get(params)} 
-   onChange={(e)=>{
-     prop.set(params, parseFloat(e.target.value))
-    onChange();
-    }} />
-  }
-  
-function edit(params: MultiShapeParams,  onChange: () => void, prop: Property, key: string) : JSX.Element {
-  var field;
-
-  if (prop.type=='boolean') {
-    field = editBoolean(params, onChange, prop, key);
-  } else if (prop.type=='colourList') {
-    field = editColourList(params, onChange, prop, key);
-  } else {
-  field = editText(params, onChange, prop, key);
- }
-return field;
-}
-
-export default App
+//sx={{ alignSelf: 'center' }
+//sx={{ alignSelf: 'flex-end' }}
+export default App;

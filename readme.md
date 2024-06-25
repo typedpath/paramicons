@@ -23,7 +23,7 @@ Infrastructure is deployed via main program [DevDeployment.kt](aws/stack/src/mai
 Its run with java 17.
 The stack is: **Route 53 Record Set** / **Cloudfront Distribution** / **S3 bucket**.  Its defined using kotlin DSL [cloudformation2kotlin](https://github.com/typedpath/cloudformation2kotlin).
 File [CloudFormationUtil.kt]([cloudformation2kotlin](https://github.com/typedpath/cloudformation2kotlin) ) does not belong here - it should be in [cloudformation2kotlin](https://github.com/typedpath/cloudformation2kotlin) 
-Similarly [StaticWebsiteResources.kt](aws/stack/src/main/kotlin/com/typedpath/stack/StaticWebsiteResources.kt) does not belong in this project as it defines a generic aws static website hosting.
+Similarly [StaticWebsiteResources.kt](aws/stack/src/main/kotlin/com/typedpath/stack/StaticWebsiteResources.kt) does not belong in this repo as it defines a generic aws static website hosting.
 
 ## TODO
 ### Whatsapp Sharing (Plan) 
