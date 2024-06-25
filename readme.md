@@ -5,6 +5,8 @@ This repo is for fun but also because . . .
   -  TODO insert examples into ui app "About" 
 - Icons should be svgs
 
+![](paramiconsample.svg)
+
 ## UI
 
 The ui is deployed here : [paramicons.testedsoftware.org](https://paramicons.testedsoftware.org/)
