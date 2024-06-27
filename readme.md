@@ -25,7 +25,10 @@ The stack is: **Route 53 Record Set** / **Cloudfront Distribution** / **S3 bucke
 File [CloudFormationUtil.kt]([cloudformation2kotlin](https://github.com/typedpath/cloudformation2kotlin) ) does not belong here - it should be in [cloudformation2kotlin](https://github.com/typedpath/cloudformation2kotlin) 
 Similarly [StaticWebsiteResources.kt](aws/stack/src/main/kotlin/com/typedpath/stack/StaticWebsiteResources.kt) does not belong in this repo as it defines a generic aws static website hosting.
 
-## TODO
+## TODO (next)
+### Dev Deployment
+[https://devparamicons.testedsoftware.org/](https://devparamicons.testedsoftware.org/)
+
 ### Whatsapp Sharing (Plan) 
 -  The share button must share the URL required to edit the shared paramicon and display in whatsapp with a thumbnail of the paramicon.
 -  Whatsapp requires a meta tag in index html something like this : &lt;meta property ="og:image" content="https://paramicons.testedsoftware.org/thumbnail[sharid].png" />
@@ -34,3 +37,6 @@ Similarly [StaticWebsiteResources.kt](aws/stack/src/main/kotlin/com/typedpath/st
 -  Shared URLS must include a share id that can be mapped to the relevant thumbnail.
 -  The meta property must be fixed server side as Facebook/Whatsapp web crawler will not run javascript.
   - Can be implemented in [lambda@edge](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-event-request-response.html)  viewer response or origin response events.
+    - see example here:  https://gist.github.com/tomas-chudjak/894d5458e844bb779375e90294d0cd2c
+      - uses bot detector:  `let prerender = /Facebot|FacebookBot|facebookexternalhit|twitterbot/i.test(userAgent[0].value`);
+      - static site gen https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-examples.html#lambda-examples-static-web-server
