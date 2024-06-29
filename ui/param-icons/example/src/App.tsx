@@ -80,6 +80,22 @@ const onHome = () => {
 
 }
 
+  //const linkAddress = 'whatsapp://send?l=en&text=' + encodeURIComponent(window.location.href) ;
+  //whatsapp://send?text=http://www.example.com
+  //const linkAddress2 = 'https://wa.me/?text=fdsdfs' ;//+ encodeURIComponent(window.location.href) ;
+  //const linkAddress3 = 'whatsapp://send?text=Checkoutthispage:{url}'
+  //const linkaction = () => {
+  //window.open('https://web.whatsapp.com://send?text=This is whatsapp sharing example using button');
+  //}
+
+
+  const whatsappf = (title: string, text: string, url: string, ) =>   {
+
+  return `https://wa.me/?text=${title}%0D%0A${url}${text ? `%0D%0A%0D%0A${text}` : ''}`};
+
+  const  linkAddress4 = whatsappf('tehtitle', 'thetext', 'https://devparamicons.testedsoftware.org');
+
+
 return  <Box sx={{ flexGrow: 1 }}>
 <AppBar position="static" >
 <Toolbar>
@@ -102,6 +118,11 @@ return  <Box sx={{ flexGrow: 1 }}>
         <MenuItem onClick={onHome}> Home</MenuItem>
         </Toolbar>
 </AppBar>
+
+<a href={linkAddress4} data-action="share/whatsapp/share" target="_blank">Share To x </a>
+
+
+
 {selected && <Edit metaData={selected.metaData} params={selected.params}/>}
 {!selected && metaDatas.map(mt=>ui(mt, onClick))}
 

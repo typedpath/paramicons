@@ -38,5 +38,5 @@ Similarly [StaticWebsiteResources.kt](aws/stack/src/main/kotlin/com/typedpath/st
 -  The meta property must be fixed server side as Facebook/Whatsapp web crawler will not run javascript.
   - Can be implemented in [lambda@edge](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-event-request-response.html)  viewer response or origin response events.
     - see example here:  https://gist.github.com/tomas-chudjak/894d5458e844bb779375e90294d0cd2c
-      - uses bot detector:  `let prerender = /Facebot|FacebookBot|facebookexternalhit|twitterbot/i.test(userAgent[0].value`);
+      - uses bot detector:  `let prerender = /Facebot|FacebookBot|facebookexternalhit|twitterbot/i.test(userAgent[0].value);`
       - static site gen https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-examples.html#lambda-examples-static-web-server

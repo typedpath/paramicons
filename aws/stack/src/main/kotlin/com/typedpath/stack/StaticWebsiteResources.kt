@@ -22,7 +22,8 @@ fun createStaticWebsiteResources(
     deploymentFolder: String?,
     domainRoot: String,
     region: Regions,
-    cloudfrontHostedZoneId: String
+    cloudfrontHostedZoneId: String,
+    lambdaFunctionAssociations: List<AWS_CloudFront_Distribution.LambdaFunctionAssociation> = emptyList()
 ): StaticWebsiteResources {
     val hostingBucket = AWS_S3_Bucket {
         bucketName = websiteDomainName
@@ -86,6 +87,7 @@ fun createStaticWebsiteResources(
                 compress = true
                 defaultTTL = 0.0//30.0
                 minTTL = 0.0//10.0
+                this.lambdaFunctionAssociations = lambdaFunctionAssociations
             }
         }
     )
