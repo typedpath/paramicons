@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
-
+import { DocSample } from "./DocSample";
 import {
   MetaData, blockconMetaData, circlyIconMetaData, polarRadialCon2MetaData, polarRadialConMetaData, spiralConMetaData, MultiShapeParams, Circlycon } from 'param-icons';
 import Edit from './Edit'
@@ -52,13 +52,13 @@ const defaultSelected: {metaData: MetaData, params: MultiShapeParams} | null = n
 const App = () => {
 
   const [ selected, setSelected] = useState<{metaData: MetaData, params: MultiShapeParams} | null>(defaultSelected);
+  const [ sampleDocOn, setSampleDocOn] = useState<boolean>(false);
+
 
    function onClick(metaDataIn: MetaData, psIn: MultiShapeParams) {
      console.log("clicked", metaDataIn, psIn)
      setSelected({metaData: metaDataIn, params: psIn})
    }
-
-
 
 
 function headerIcon() : JSX.Element {
@@ -76,8 +76,14 @@ return <Circlycon
 
 const onHome = () => {
   setSelected(null);
+  setSampleDocOn(false)
   window.history.replaceState(null, "Paramicons", "/")
+}
 
+const onSampleDoc = () => {
+  setSelected(null);
+  setSampleDocOn(!sampleDocOn)
+  window.history.replaceState(null, "Paramicons", "/")
 }
 
   //const linkAddress = 'whatsapp://send?l=en&text=' + encodeURIComponent(window.location.href) ;
@@ -115,16 +121,18 @@ return  <Box sx={{ flexGrow: 1 }}>
         <Typography variant="h3" component="div" sx={{ flexGrow: 1, alignSelf: 'center'  }}>
         Param-Iconz
           </Typography>
+          <MenuItem onClick={onSampleDoc}> Sample Doc</MenuItem>
+
         <MenuItem onClick={onHome}> Home</MenuItem>
         </Toolbar>
 </AppBar>
 
-<a href={linkAddress4} data-action="share/whatsapp/share" target="_blank">Share To x </a>
-
+<a href={linkAddress4} data-action="share/whatsapp/share" target="_blank">Share To WhatsApp </a>
 
 
 {selected && <Edit metaData={selected.metaData} params={selected.params}/>}
-{!selected && metaDatas.map(mt=>ui(mt, onClick))}
+{!selected && !sampleDocOn && metaDatas.map(mt=>ui(mt, onClick))}
+{sampleDocOn && <DocSample/>}
 
 </Box>
 }
