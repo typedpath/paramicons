@@ -23,7 +23,8 @@ fun createStaticWebsiteResources(
     domainRoot: String,
     region: Regions,
     cloudfrontHostedZoneId: String,
-    lambdaFunctionAssociations: List<AWS_CloudFront_Distribution.LambdaFunctionAssociation> = emptyList()
+    lambdaFunctionAssociations: List<AWS_CloudFront_Distribution.LambdaFunctionAssociation> = emptyList(),
+    path2ExtraOrigins: Map<String, AWS_CloudFront_Distribution.Origin> = emptyMap()
 ): StaticWebsiteResources {
     val hostingBucket = AWS_S3_Bucket {
         bucketName = websiteDomainName
@@ -54,8 +55,51 @@ fun createStaticWebsiteResources(
         }
     })
 
+    fun createOrigins(path2ExtraOrigins: Map<String, AWS_CloudFront_Distribution.Origin>): List<AWS_CloudFront_Distribution.Origin> {
+        val origins = path2ExtraOrigins.values.toMutableList()
+        origins.add(
+            // for variable regions             - DomainName: {"Fn::Join": ["", [{Ref: WebSite}, ".", {"Fn::FindInMap": [RegionMap, {Ref: "AWS::Region"}, websiteendpoint]}]]}
+            AWS_CloudFront_Distribution.Origin(
+                domainName = template.join(
+                    "",
+                    listOf(template.ref(hostingBucket), ".s3-website-${region.name.replace('_', '-').toLowerCase()}.amazonaws.com")
+                ),
+                id = "S3Origin"
+            ) {
+                customOriginConfig = AWS_CloudFront_Distribution.CustomOriginConfig("http-only") {
+                    hTTPPort = 80
+                    hTTPSPort = 443
+                    originPath = if (deploymentFolder==null) null else "/$deploymentFolder"
+                }
+            })
+        return origins
+    }
+
+    fun createCacheBehaviours(path2ExtraOrigins: Map<String, AWS_CloudFront_Distribution.Origin>) : List<AWS_CloudFront_Distribution.CacheBehavior>  =
+         path2ExtraOrigins.entries.map {
+             AWS_CloudFront_Distribution.CacheBehavior(targetOriginId = it.value.id, pathPattern = it.key,
+                  viewerProtocolPolicy ="allow-all" ) {
+                 allowedMethods = listOf("GET", "HEAD", "POST")
+                 compress = true
+                 defaultTTL = 0.0//30.0
+                 minTTL = 0.0//10.0
+                 forwardedValues = AWS_CloudFront_Distribution.ForwardedValues(queryString = true)
+             }
+         }
+
     val cloudFrontDistribution = AWS_CloudFront_Distribution(
-        distributionConfig = AWS_CloudFront_Distribution.DistributionConfig(enabled = true) {
+        distributionConfig = AWS_CloudFront_Distribution.DistributionConfig(enabled = true,
+            defaultCacheBehavior = AWS_CloudFront_Distribution.DefaultCacheBehavior(
+                targetOriginId = "S3Origin",
+                viewerProtocolPolicy = "allow-all",
+            ) {
+                allowedMethods = listOf("GET", "HEAD")
+                compress = true
+                defaultTTL = 0.0//30.0
+                minTTL = 0.0//10.0
+                this.lambdaFunctionAssociations = lambdaFunctionAssociations
+                forwardedValues = AWS_CloudFront_Distribution.ForwardedValues(queryString = true)
+            }) {
             viewerCertificate = AWS_CloudFront_Distribution.ViewerCertificate {
                 acmCertificateArn = sslCertArn
                 sslSupportMethod = "sni-only"
@@ -63,32 +107,8 @@ fun createStaticWebsiteResources(
             httpVersion = "http2"
             aliases = listOf(websiteDomainName)
             defaultRootObject = "index.html"
-            origins = listOf(
-// for variable regions             - DomainName: {"Fn::Join": ["", [{Ref: WebSite}, ".", {"Fn::FindInMap": [RegionMap, {Ref: "AWS::Region"}, websiteendpoint]}]]}
-                AWS_CloudFront_Distribution.Origin(
-                    domainName = template.join(
-                        "",
-                        listOf(template.ref(hostingBucket), ".s3-website-${region.name.replace('_', '-').toLowerCase()}.amazonaws.com")
-                    ),
-                    id = "S3Origin"
-                ) {
-                    customOriginConfig = AWS_CloudFront_Distribution.CustomOriginConfig("http-only") {
-                        hTTPPort = 80
-                        hTTPSPort = 443
-                        originPath = if (deploymentFolder==null) null else "/$deploymentFolder"
-                    }
-                })
-            defaultCacheBehavior = AWS_CloudFront_Distribution.DefaultCacheBehavior(
-                targetOriginId = "S3Origin",
-                viewerProtocolPolicy = "allow-all",
-                forwardedValues = AWS_CloudFront_Distribution.ForwardedValues(queryString = true)
-            ) {
-                allowedMethods = listOf("GET", "HEAD")
-                compress = true
-                defaultTTL = 0.0//30.0
-                minTTL = 0.0//10.0
-                this.lambdaFunctionAssociations = lambdaFunctionAssociations
-            }
+            origins = createOrigins(path2ExtraOrigins)
+            cacheBehaviors = createCacheBehaviours(path2ExtraOrigins)
         }
     )
 
@@ -123,4 +143,6 @@ fun createStaticWebsiteResources(
             cloudFrontDistribution,
             dnsRecordSetGroup
     )
+
+
 }

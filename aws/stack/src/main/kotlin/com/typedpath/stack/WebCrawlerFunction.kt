@@ -1,14 +1,19 @@
 package com.typedpath.stack
 
-val webCrawlerFunctionCode = """
+object WebCrawlerFunction {
+    fun webCrawlerFunctionJs() : String =
+         WebCrawlerFunction.javaClass.getResource("/webCrawlerFunction.js").readText()
+
+    val webCrawlerFunctionCode = """
 // inline
 exports.handler = async(event, context, callback) => {
 const request = event.Records[0].cf.request;
 const response = event.Records[0].cf.response;
 var uri = request.uri
-if (uri.indexOf("index.html")<=0) {
-console.log('uri', uri);
+console.log('uri 2 ', uri);
+if (uri.indexOf("/view")<0) {
 callback(null, response);
+return;
 }
 console.log("input ", event);
 console.log("request", request);
@@ -43,3 +48,4 @@ if (isWebcrawler) {
 }   
 """.trimIndent()
 
+}

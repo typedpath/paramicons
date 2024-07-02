@@ -20,7 +20,10 @@ dependencies {
 
     implementation("com.amazonaws:aws-java-sdk-s3:1.11.574")
     implementation("com.amazonaws:aws-java-sdk-cloudformation:1.11.574")
-    implementation("com.typedpath:cloudformation2kotlin:2.0.1-SNAPSHOT")
+    implementation("com.typedpath:cloudformation2kotlin:2.0.2-SNAPSHOT")
+
+    //TODO try cdk implementation("software.amazon.awscdk:aws-cdk-lib:2.0.0")
+
 }
 
 tasks.test {
