@@ -90,20 +90,33 @@ class HostTemplate(params: StackParams) : ServerlessCloudformationTemplate() {
 
     }
 
-    val webcrawlerOrigin = AWS_CloudFront_Distribution.Origin(
-        domainName = this.ref(webCrawlerLambdaUrl.functionUrlAttribute()),
-        id = "webcrawler") {
-    }
+   // val webcrawlerOrigin = AWS_CloudFront_Distribution.Origin(
+   //     domainName = this.ref(webCrawlerLambdaUrl.functionUrlAttribute()),
+   //     id = "webcrawler") {
+   // }
 
     val websiteResources: CloudFormationTemplate.ResourceGroup = createStaticWebsiteResources(
         template = this,
         websiteDomainName = "${params.name}.${params.rootDomain}",
         sslCertArn = params.wildCardSslCertArn,
         deploymentFolder = null, domainRoot = params.rootDomain, region = params.region,
-        cloudfrontHostedZoneId = params.cloudFrontHostedZoneId,
+        cloudfrontHostedZoneId = params.cloudFrontHostedZoneId
+        //,
         //lambdaFunctionAssociations =  listOf(webCrawlerFunctionAssociation)
-        path2ExtraOrigins = mapOf( "/view/*" to webcrawlerOrigin)
+        //path2ExtraOrigins = mapOf( "/view/*" to webcrawlerOrigin)
     )
+
+    // cdk.Fn.select(2, cdk.Fn.split('/', functionUrl.url));
+    //!Select [2, !Split ["/", !Ref LambdaFunctionUrl ]]
+    val FunctionUrl = Output(this.ref(webCrawlerLambdaUrl.functionUrlAttribute())) {
+        description = "API endpoint URL for Prod environment"
+    }
+
+    // cdk.Fn.select(2, cdk.Fn.split('/', functionUrl.url));
+    //!Select [2, !Split ["/", !Ref LambdaFunctionUrl ]]
+    val FunctionUrlDomainOnly = Output(this.rawInstrinsicFunctionCall("!Select [2, !Split [\"/\", !GetAtt webCrawlerLambdaUrl.FunctionUrl ]]")) {
+        description = "API endpoint URL for Prod environment"
+    }
 
 }
 
