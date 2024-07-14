@@ -15,6 +15,8 @@ class StaticWebsiteResources (
     val dnsRecordSetGroup: AWS_Route53_RecordSetGroup
 ) : CloudFormationTemplate.ResourceGroup()
 
+class OriginConfig(val origin: AWS_CloudFront_Distribution.Origin, val lambdaFunctionAssociations: List<AWS_CloudFront_Distribution.LambdaFunctionAssociation> = emptyList())
+
 fun createStaticWebsiteResources(
     template: CloudFormationTemplate,
     websiteDomainName: String,
@@ -24,7 +26,7 @@ fun createStaticWebsiteResources(
     region: Regions,
     cloudfrontHostedZoneId: String,
     lambdaFunctionAssociations: List<AWS_CloudFront_Distribution.LambdaFunctionAssociation> = emptyList(),
-    path2ExtraOrigins: Map<String, AWS_CloudFront_Distribution.Origin> = emptyMap()
+    path2ExtraOrigins: Map<String, OriginConfig> = emptyMap()
 ): StaticWebsiteResources {
     val hostingBucket = AWS_S3_Bucket {
         bucketName = websiteDomainName
@@ -55,8 +57,8 @@ fun createStaticWebsiteResources(
         }
     })
 
-    fun createOrigins(path2ExtraOrigins: Map<String, AWS_CloudFront_Distribution.Origin>): List<AWS_CloudFront_Distribution.Origin> {
-        val origins = path2ExtraOrigins.values.toMutableList()
+    fun createOrigins(path2ExtraOrigins: Map<String, OriginConfig>): List<AWS_CloudFront_Distribution.Origin> {
+        val origins = path2ExtraOrigins.map{ it.value.origin }.toMutableList()
         origins.add(
             // for variable regions             - DomainName: {"Fn::Join": ["", [{Ref: WebSite}, ".", {"Fn::FindInMap": [RegionMap, {Ref: "AWS::Region"}, websiteendpoint]}]]}
             AWS_CloudFront_Distribution.Origin(
@@ -75,15 +77,16 @@ fun createStaticWebsiteResources(
         return origins
     }
 
-    fun createCacheBehaviours(path2ExtraOrigins: Map<String, AWS_CloudFront_Distribution.Origin>) : List<AWS_CloudFront_Distribution.CacheBehavior>  =
+    fun createCacheBehaviours(path2ExtraOrigins: Map<String, OriginConfig>) : List<AWS_CloudFront_Distribution.CacheBehavior>  =
          path2ExtraOrigins.entries.map {
-             AWS_CloudFront_Distribution.CacheBehavior(targetOriginId = it.value.id, pathPattern = it.key,
+             AWS_CloudFront_Distribution.CacheBehavior(targetOriginId = it.value.origin.id, pathPattern = it.key,
                   viewerProtocolPolicy ="allow-all" ) {
-                 allowedMethods = listOf("GET", "HEAD", "POST")
+                 allowedMethods = listOf("GET", "HEAD", "OPTIONS", "PUT", "PATCH", "POST", "DELETE")
                  compress = true
                  defaultTTL = 0.0//30.0
                  minTTL = 0.0//10.0
                  forwardedValues = AWS_CloudFront_Distribution.ForwardedValues(queryString = true)
+                 this@CacheBehavior.lambdaFunctionAssociations = it.value.lambdaFunctionAssociations
              }
          }
 

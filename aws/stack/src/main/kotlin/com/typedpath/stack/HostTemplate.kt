@@ -1,30 +1,52 @@
 package com.typedpath.stack
 
-import com.amazonaws.partitions.model.Service
-import com.amazonaws.regions.Regions
 import com.typedpath.awscloudformation.CloudFormationTemplate
-import com.typedpath.awscloudformation.LambdaRuntime
 import com.typedpath.awscloudformation.schema.*
 import com.typedpath.awscloudformation.serverlessschema.ServerlessCloudformationTemplate
 import com.typedpath.iam2kotlin.IamPolicy
-import com.typedpath.iam2kotlin.resources.ec2.Ec2Action
-import com.typedpath.iam2kotlin.resources.logs.LogsAction
+import com.typedpath.iam2kotlin.resources.s3.S3Action
 import com.typedpath.iam2kotlin.resources.sts.StsAction
-import com.typedpath.stack.WebCrawlerFunction.webCrawlerFunctionJs
 
 // TODO fix bug in awscloudformation forcing templates to be in package com.typedpath.**
 
 class HostTemplate(params: StackParams) : ServerlessCloudformationTemplate() {
 
-    data class StackParams(
-        val region: Regions,
-        val name: String,
-        val rootDomain: String,
-        val wildCardSslCertArn: String,
-        val cloudFrontHostedZoneId: String
-    )
+    val websiteDomainName = params.websiteDomainName()
 
-    // one day there will be some service infrastructure defined here !
+    // based on this https://docs.aws.amazon.com/lambda/latest/dg/urls-tutorial.html
+// what about this: https://github.com/aws-samples/serverless-patterns/blob/main/cloudfront-lambda-url-java/template.yml
+/*
+
+    val webCrawlerFunction = AWS_Lambda_Function(
+        code = AWS_Lambda_Function.Code {
+            zipFile = inlineCode(webCrawlerLambdaFunctionUrlJs(), "//");
+        },
+        role = ref(webCrawlerFunctionRole.arnAttribute()),
+    ) {
+        handler = "index.handler"
+        runtime = "nodejs18.x"
+    }
+
+        val webCrawlerFunctionPermission = AWS_Lambda_Permission(functionName = ref(webCrawlerFunction),
+           action = "lambda:InvokeFunctionUrl",
+           principal = "*"
+        ) {
+          functionUrlAuthType = "NONE"
+    }
+    val webCrawlerLambdaUrl = AWS_Lambda_Url(
+        authType = "NONE",
+        targetFunctionArn = ref(webCrawlerFunction)
+    ) { }
+
+val webcrawlerOrigin = AWS_CloudFront_Distribution.Origin(
+    domainName = "!Select [2, !Split [\"/\", !GetAtt webCrawlerLambdaUrl.FunctionUrl ]]",
+    id = "webcrawler") {
+    customOriginConfig = AWS_CloudFront_Distribution.CustomOriginConfig("match-viewer") {
+        hTTPPort = 80
+        hTTPSPort = 443
+
+    }
+}
 
     val webCrawlerFunctionRole = AWS_IAM_Role(assumeRolePolicyDocument = IamPolicy {
         statement {
@@ -38,25 +60,12 @@ class HostTemplate(params: StackParams) : ServerlessCloudformationTemplate() {
             action(StsAction.AssumeRole)
         }
     }) {
-        /*policies = listOf (
-            AWS_IAM_Role.Policy(policyName = "access", policyDocument = IamPolicy() {
-                 statement {
-                     effect = IamPolicy.EffectType.Allow
-                     action(Ec2Action.DescribeRegions)
-                     action(LogsAction.DescribeLogGroups)
-                     action(LogsAction.PutRetentionPolicy)
-                     action(LogsAction.CreateLogStream)
-                     action(LogsAction.PutLogEvents)
-                     resource(IamPolicy.Resource.All)
-                 }
-            })
-        )*/
         managedPolicyArns = listOf( "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole")
     }
 
-    val webCrawlerFunctionGreen = AWS_Lambda_Function(
+    val webCrawlerFunctionBlue = AWS_Lambda_Function(
         code = AWS_Lambda_Function.Code {
-            zipFile = inlineCode(webCrawlerFunctionJs(), "//");
+            zipFile = inlineCode(webCrawlerEdgeFunctionJs(), "//");
         },
         role = ref(webCrawlerFunctionRole.arnAttribute()),
     ) {
@@ -65,7 +74,7 @@ class HostTemplate(params: StackParams) : ServerlessCloudformationTemplate() {
     }
 
     val webCrawlerFunctionVersion = AWS_Lambda_Version(
-        functionName = this.ref(webCrawlerFunctionGreen)
+        functionName = this.ref(webCrawlerFunctionBlue)
     )
 
     val webCrawlerFunctionAssociation = AWS_CloudFront_Distribution.LambdaFunctionAssociation() {
@@ -73,48 +82,96 @@ class HostTemplate(params: StackParams) : ServerlessCloudformationTemplate() {
         lambdaFunctionARN = this@HostTemplate.ref(webCrawlerFunctionVersion);
     }
 
-    val webCrawlerFunction = AWS_Lambda_Function(
+*/
+
+    val thumbnailerFunctionFunctionRole = AWS_IAM_Role(assumeRolePolicyDocument = IamPolicy {
+        statement {
+            effect = IamPolicy.EffectType.Allow
+            principal = mutableMapOf(
+                IamPolicy.PrincipalType.Service to listOf(
+                    "edgelambda.amazonaws.com",
+                    "lambda.amazonaws.com"
+                )
+            )
+            action(StsAction.AssumeRole)
+        }
+    }) {
+        managedPolicyArns = listOf( "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole")
+        policies = listOf(
+            AWS_IAM_Role.Policy(policyName = "s3Policy", policyDocument = IamPolicy() {
+                statement {
+                    effect = IamPolicy.EffectType.Allow
+                    action(S3Action.PutObject)
+                    action(S3Action.All)
+                    resource(IamPolicy.Resource("arn:aws:s3:::${websiteDomainName}/*"))
+                }
+            }) {
+
+            }
+        )
+    }
+
+    val svgThumbnailerFunction = AWS_Lambda_Function(
         code = AWS_Lambda_Function.Code {
-            zipFile = inlineCode(webCrawlerFunctionJs(), "//");
+            s3Bucket = params.functionCodeBucketName()
+            s3Key = params.thumbnailerCodeJar
         },
-        role = ref(webCrawlerFunctionRole.arnAttribute()),
+        role = ref(thumbnailerFunctionFunctionRole.arnAttribute())
     ) {
-        handler = "index.handler"
-        runtime = "nodejs18.x"
+        handler = "org.testedsoftware.paramicons.SvgThumbnailHandler"
+        runtime = "java17"
+        timeout = 30
+        memorySize = 1024
+        environment = AWS_Lambda_Function.Environment() {
+            variables = mapOf("s3bucket" to websiteDomainName)
+        }
     }
 
-    val webCrawlerLambdaUrl = AWS_Lambda_Url(
+    val thumbnailerLambdaUrl = AWS_Lambda_Url(
         authType = "NONE",
-        targetFunctionArn = ref(webCrawlerFunction)
-    ) {
+        targetFunctionArn = ref(svgThumbnailerFunction)
+    ) { }
 
+    val thumbnailerOrigin = AWS_CloudFront_Distribution.Origin(
+        domainName = "!Select [2, !Split [\"/\", !GetAtt thumbnailerLambdaUrl.FunctionUrl ]]",
+        id = "webcrawler") {
+        customOriginConfig = AWS_CloudFront_Distribution.CustomOriginConfig("match-viewer") {
+            hTTPPort = 80
+            hTTPSPort = 443
+
+        }
     }
 
-   // val webcrawlerOrigin = AWS_CloudFront_Distribution.Origin(
-   //     domainName = this.ref(webCrawlerLambdaUrl.functionUrlAttribute()),
-   //     id = "webcrawler") {
-   // }
+    val thumbnailerFunctionPermission = AWS_Lambda_Permission(functionName = ref(svgThumbnailerFunction),
+        action = "lambda:InvokeFunctionUrl",
+        principal = "*"
+    ) {
+        functionUrlAuthType = "NONE"
+    }
+
 
     val websiteResources: CloudFormationTemplate.ResourceGroup = createStaticWebsiteResources(
         template = this,
-        websiteDomainName = "${params.name}.${params.rootDomain}",
+        websiteDomainName = websiteDomainName,
         sslCertArn = params.wildCardSslCertArn,
         deploymentFolder = null, domainRoot = params.rootDomain, region = params.region,
         cloudfrontHostedZoneId = params.cloudFrontHostedZoneId
         //,
         //lambdaFunctionAssociations =  listOf(webCrawlerFunctionAssociation)
-        //path2ExtraOrigins = mapOf( "/view/*" to webcrawlerOrigin)
+        ,path2ExtraOrigins = mapOf( "/share/*" to OriginConfig(origin= thumbnailerOrigin,
+            lambdaFunctionAssociations = emptyList()//listOf(webCrawlerFunctionAssociation)
+            ))
     )
 
     // cdk.Fn.select(2, cdk.Fn.split('/', functionUrl.url));
     //!Select [2, !Split ["/", !Ref LambdaFunctionUrl ]]
-    val FunctionUrl = Output(this.ref(webCrawlerLambdaUrl.functionUrlAttribute())) {
+    val FunctionUrl = Output(this.ref(thumbnailerLambdaUrl.functionUrlAttribute())) {
         description = "API endpoint URL for Prod environment"
     }
 
     // cdk.Fn.select(2, cdk.Fn.split('/', functionUrl.url));
     //!Select [2, !Split ["/", !Ref LambdaFunctionUrl ]]
-    val FunctionUrlDomainOnly = Output(this.rawInstrinsicFunctionCall("!Select [2, !Split [\"/\", !GetAtt webCrawlerLambdaUrl.FunctionUrl ]]")) {
+    val FunctionUrlDomainOnly = Output(this.rawInstrinsicFunctionCall("!Select [2, !Split [\"/\", !GetAtt thumbnailerLambdaUrl.FunctionUrl ]]")) {
         description = "API endpoint URL for Prod environment"
     }
 

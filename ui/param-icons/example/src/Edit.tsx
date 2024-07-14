@@ -1,20 +1,17 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import { Property,  MetaData, MultiShapeParams } from 'param-icons';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import Typography from "@mui/material/Typography";
-//import Card from "@mui/material/Card";
-//import CardContent from "@mui/material/CardContent";
-
-
+import { ShareData, ShareView } from './Share';
 
 import ColourListSvg from './ColourListSvg';
 import ReactDOMServer from 'react-dom/server';
 
 import Stack  from '@mui/material/Stack';
-
+import svgThumbnail from './services/SvgThumbnailer';
 
 
 export interface EditParams {
@@ -34,14 +31,28 @@ const Edit = (editParams: EditParams) => {
   
   const [ params, setParams] = useState(paramsForEdit(editParams.params));
 
+
+  const [shareData, setShareData] = useState<ShareData | null>(null)
+
+  const onClickShare = () => {
+      setShareData(shareData ? null : {link: null});
+      let newParams = {...params};
+      newParams.loading=!shareData;
+      setParams(newParams) ;
+  }
+
+  function renderAsSvgString(width: number, height: number) : string {
+    const renderPs = {...params} 
+    renderPs.pageHeight=height;
+    renderPs.pageWidth=width;
+
+    const el: JSX.Element = editParams.metaData.render(renderPs);
+    return  ReactDOMServer.renderToStaticMarkup(el);
+  }
+
   const onClickDownload = () => {
 
-    const renderPs = {...params} 
-    renderPs.pageHeight=200;
-    renderPs.pageWidth=200;
-  
-    const el: JSX.Element = editParams.metaData.render(renderPs);
-    const strEl: string = ReactDOMServer.renderToStaticMarkup(el);
+    let strEl = renderAsSvgString(200, 200)
   
     const blob = new Blob([strEl]);
     const fileDownloadUrl = URL.createObjectURL(blob);
@@ -61,18 +72,32 @@ const Edit = (editParams: EditParams) => {
 
 
 function propertyUi(ps: Property) : JSX.Element{
-  //return <Card sx={{margin: 0, padding: 0}} variant={"outlined"}>
-  //<CardContent sx={{margin: 0, pt: 1}}>  {edit(params, onChange, ps, ps.name)}</CardContent></Card>
-  return  <Fragment>{edit(params, onChange, ps, ps.name)}</Fragment>
-
+   return  <Fragment>{edit(params, onChange, ps, ps.name)}</Fragment>
 }
  
+useEffect( () => {
+  if (shareData!=null && !shareData.link) svgThumbnail(renderAsSvgString(params.pageWidth!!, params.pageHeight!!)).then( (data) =>  
+    {
+    setShareData({link: data.toString()})
+    console.log('share.link:', data)
+    let newParams = {...params};
+    newParams.loading=false;
+    setParams(newParams) ;
+    }
+  );
+}
+);
+
   const ui = <Stack>
-    <Button style={{textAlign: 'left'}} onClick={onClickDownload}><Typography variant="h4" >
-        Download
-          </Typography></Button>
+    <Button style={{textAlign: 'left'}} onClick={onClickDownload}>
+      <Typography variant="h4" >Download</Typography>
+        </Button>
+        <Button style={{textAlign: 'left'}} >
+      <Typography variant="h4"  onClick={onClickShare}>{shareData? "Edit" : "Share"}</Typography>
+        </Button>
+     {shareData && (shareData.link ? <ShareView link={shareData.link}></ShareView> : "building share link . . .")}   
      {editParams.metaData.render(params)}
-     {editParams.metaData.properties.map(ps => propertyUi(ps)) }
+     {!shareData && editParams.metaData.properties.map(ps => propertyUi(ps)) }
   </Stack>
   return ui;
   }

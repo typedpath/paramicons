@@ -6,6 +6,10 @@ npx create-react-library param-icons --template typescript
 in example
 npm install --save @material-ui/core
 
+in example
+npm install --save axios
+
+
 // removed: npm install --save material-ui-color-picker
 npm install --save material-ui-color
 

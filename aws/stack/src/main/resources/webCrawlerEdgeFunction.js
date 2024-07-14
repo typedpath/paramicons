@@ -1,4 +1,6 @@
 exports.handler = async(event, context, callback) => {
+    console.log('event', event);
+    console.log('context', context);
     const request = event.Records[0].cf.request;
     const response = event.Records[0].cf.response;
     var uri = request.uri
@@ -24,7 +26,7 @@ exports.handler = async(event, context, callback) => {
                     "value": "max-age=1"
                 }]
             },
-            body: 'hello webcrawler',
+            body: 'hello webcrawler xxx',
         };
     callback(null, newResponse);
 }

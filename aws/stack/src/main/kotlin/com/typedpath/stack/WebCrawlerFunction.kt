@@ -1,8 +1,11 @@
 package com.typedpath.stack
 
 object WebCrawlerFunction {
-    fun webCrawlerFunctionJs() : String =
-         WebCrawlerFunction.javaClass.getResource("/webCrawlerFunction.js").readText()
+    fun webCrawlerEdgeFunctionJs() : String =
+         WebCrawlerFunction.javaClass.getResource("/webCrawlerEdgeFunction.js").readText()
+
+    fun webCrawlerLambdaFunctionUrlJs() : String =
+        WebCrawlerFunction.javaClass.getResource("/webCrawlerLambdaFunctionUrl.js").readText()
 
     val webCrawlerFunctionCode = """
 // inline
