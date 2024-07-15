@@ -19,7 +19,11 @@ class SvgThumbnailHandler : RequestHandler<APIGatewayV2HTTPEvent, APIGatewayV2HT
         System.out.println("svg: $svg")
         val urlRoot = "https://$s3bucket"
         System.out.println("urlRoot ='$urlRoot'")
-        val indexPage = thumbnailToS3(bucketName = s3bucket, urlRoot = urlRoot, svg = svg, width = 256, height=256)
+        val rawQueryString = input.rawQueryString
+        System.out.println("rawQueryString ='$rawQueryString'")
+
+        val indexPage = thumbnailToS3(bucketName = s3bucket, urlRoot = urlRoot, rawQueryString = rawQueryString,
+            svg = svg, width = 256, height=256)
         System.out.println("indexPage: $indexPage")
 
        return APIGatewayV2HTTPResponse.builder()

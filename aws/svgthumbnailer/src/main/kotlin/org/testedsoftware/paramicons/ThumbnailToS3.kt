@@ -7,9 +7,9 @@ import com.amazonaws.services.s3.model.PutObjectRequest
 import java.io.ByteArrayInputStream
 
 
-fun thumbnailToS3(bucketName: String,  svg: String, urlRoot: String, width: Int, height: Int) : String {
+fun thumbnailToS3(bucketName: String,  svg: String, urlRoot: String, width: Int, height: Int, rawQueryString: String) : String {
     println("calling thumbnail")
-    val thumbnail = thumbnail(svg = svg, urlRoot=urlRoot, width=width, height= height)
+    val thumbnail = thumbnail(svg = svg, urlRoot=urlRoot, rawQueryString=rawQueryString, width=width, height= height)
     println("called thumbnail image bytes: ${thumbnail.thumbnailImage.size}")
 
     //val s3Builder = AmazonS3Client.builder()

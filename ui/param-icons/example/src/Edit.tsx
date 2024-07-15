@@ -45,14 +45,14 @@ const Edit = (editParams: EditParams) => {
     const renderPs = {...params} 
     renderPs.pageHeight=height;
     renderPs.pageWidth=width;
-
+console.log("renderAsSvgString ", width, height );
     const el: JSX.Element = editParams.metaData.render(renderPs);
     return  ReactDOMServer.renderToStaticMarkup(el);
   }
 
   const onClickDownload = () => {
 
-    let strEl = renderAsSvgString(200, 200)
+    let strEl = renderAsSvgString(600, 600)
   
     const blob = new Blob([strEl]);
     const fileDownloadUrl = URL.createObjectURL(blob);
@@ -76,7 +76,8 @@ function propertyUi(ps: Property) : JSX.Element{
 }
  
 useEffect( () => {
-  if (shareData!=null && !shareData.link) svgThumbnail(renderAsSvgString(params.pageWidth!!, params.pageHeight!!)).then( (data) =>  
+  if (shareData!=null && !shareData.link) svgThumbnail(renderAsSvgString(600, 600), editParams.metaData.id, params)
+    .then( (data) =>  
     {
     setShareData({link: data.toString()})
     console.log('share.link:', data)

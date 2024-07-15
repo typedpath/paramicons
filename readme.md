@@ -29,3 +29,6 @@ Similarly [StaticWebsiteResources.kt](aws/stack/src/main/kotlin/com/typedpath/st
 ### Dev Deployment
 [https://devparamicons.testedsoftware.org/](https://devparamicons.testedsoftware.org/)
 
+### Cost Prediction
+### Rate Limiting 
+https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/WAF-one-click-rate-limiting.html

@@ -8,12 +8,12 @@ import java.io.ByteArrayOutputStream
 import java.util.*
 
 
-data class Thumbnail (val indexPage: String, val indexPageKey: String,
+data class Thumbnail (val indexPage: String,  val indexPageKey: String,
                       val thumbnailImage: ByteArray, val thumbnailImageKey: String, val id: String)
 // Thread.currentThread().contextClassLoader.getResource(path) might be better ?
 val indexPageTemplate = object {}.javaClass.getResource("/indexPageTemplate.html")?.readText()!!
 //val indexPageTemplate  = Thread.currentThread().contextClassLoader.getResource("/indexPageTemplate.html").readText()
-fun thumbnail(svg: String, urlRoot: String, width: Int, height: Int) : Thumbnail{
+fun thumbnail(svg: String, urlRoot: String, rawQueryString:String, width: Int, height: Int) : Thumbnail{
     val id=UUID.randomUUID()!!
     val thumbnailImageKey = "indicies/$id.jpg"
     val indexPageKey = "indicies/$id.html"
@@ -50,7 +50,8 @@ fun thumbnail(svg: String, urlRoot: String, width: Int, height: Int) : Thumbnail
         "og:image:width" to width.toString(), "og:image:height" to height.toString(),
         "og:updated_time" to System.currentTimeMillis().toString(),
         "svg" to svg,
-        "urlRoot" to urlRoot
+        "urlRoot" to urlRoot,
+        "rawQueryString" to rawQueryString
     ).entries.forEach{
         e ->  indexPage=indexPage.replace("\${${e.key}}", e.value)
     }

@@ -26,6 +26,7 @@ function property(name: string, type: string, description: string) : Property {
 }
 
 export interface MetaData {
+  id: string,
   description: string,
   properties:  Property[];
   defaultParams: MultiShapeParams;
@@ -63,6 +64,8 @@ const defaultBlockconParams3: BlockConParams = {
 
 export const blockconMetaData: MetaData =
   {
+    // change this if backward compatibility is an issue only
+    id : "Blockcon.0",
     description: "Blockcon",
     properties: blockconParamsProperties,
     defaultParams: defaultBlockconParams, 
@@ -109,6 +112,8 @@ const defaultCirclyconParams2: CirclyconParams = {
 
 export const circlyIconMetaData: MetaData =
   {
+    // change this if backward compatibility is an issue only
+    id : "CirclyIcon.0",
     description: "CirclyIcon",
     properties: circlyIconParamsProperties,
     defaultParams: defaultCirclyconParams, 
@@ -257,6 +262,8 @@ const defaultPolarRadialCon2Params9 = function () {
 
 export const polarRadialCon2MetaData: MetaData =
   {
+    // change this if backward compatibility is an issue only
+    id : "PolarRadialCon2.0",
     description: "Polar Radial Icon2",
     properties: polarRadial2ConParamsProperties,
     defaultParams: defaultPolarRadialCon2Params, 
@@ -295,6 +302,8 @@ const defaultPolarRadialConParams: PolarRadialConParams = {
 
 export const polarRadialConMetaData: MetaData =
   {
+    // change this if backward compatibility is an issue only
+    id : "PolarRadialCon.0",
     description: "Polar Radial Icon",
     properties: polarRadialConParamsProperties,
     defaultParams: defaultPolarRadialConParams, 
@@ -324,6 +333,8 @@ const spiralConParams: SpiralconParams = {
 
 export const spiralConMetaData: MetaData =
   {
+    // change this if backward compatibility is an issue only
+    id : "SpiralCon.0",
     description: "Spiral Icon",
     properties: spiralConParamsProperties,
     defaultParams: spiralConParams, 

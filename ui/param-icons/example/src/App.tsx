@@ -1,4 +1,4 @@
-import React, { useState }  from "react";
+import React, { useEffect, useState }  from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
@@ -47,7 +47,7 @@ return <Card variant={"outlined"}>
 
 const metaDatas: MetaData[] = [circlyIconMetaData, polarRadialCon2MetaData, blockconMetaData, polarRadialConMetaData,  spiralConMetaData]
 
-const defaultSelected: {metaData: MetaData, params: MultiShapeParams} | null = null
+const defaultSelected: {metaData: MetaData, params: MultiShapeParams} | null = getDefaultSelected()
 
 const App = () => {
 
@@ -86,6 +86,7 @@ const onSampleDoc = () => {
   window.history.replaceState(null, "Paramicons", "/")
 }
 
+
 return  <Box sx={{ flexGrow: 1 }}>
 <AppBar position="static" >
 <Toolbar>
@@ -106,16 +107,35 @@ return  <Box sx={{ flexGrow: 1 }}>
         Param-Iconz
           </Typography>
           <MenuItem onClick={onSampleDoc}> Sample Doc</MenuItem>
-
         <MenuItem onClick={onHome}> Home</MenuItem>
         </Toolbar>
 </AppBar>
-
 {selected && <Edit metaData={selected.metaData} params={selected.params}/>}
 {!selected && !sampleDocOn && metaDatas.map(mt=>ui(mt, onClick))}
 {sampleDocOn && <DocSample/>}
 
 </Box>
+}
+
+function getDefaultSelected(): {metaData: MetaData, params: MultiShapeParams} | null{
+  //?id=CirclyIcon.0&params=%7B%22margin%22:10,%22depth%22:3,%22decreaseRatio%22:1.3,%22angleDegrees%22:60,%22loading%22:true,%22fillColours%22:[%22red%22,%22orange%22,%22yellow%22],%22pageWidth%22:300,%22pageHeight%22:300%7D
+
+const queryParams = new URLSearchParams(window.location.search)
+const id = queryParams.get("id")
+const params = queryParams.get("params")
+
+console.log("id", id)
+console.log("params", params)
+if (params && id) {
+  let oParams = JSON.parse(params)
+  console.log("oParams", oParams)
+  let metaDataSelected = metaDatas.find(m=>id==m.id)
+  if (metaDataSelected) {
+    console.log("metaDataSelected", metaDataSelected);
+    return {metaData: metaDataSelected,  params:  oParams} ;
+  }
+} 
+return null;
 }
 
 export default App;
