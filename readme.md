@@ -36,7 +36,7 @@ diagram generated with this util:  https://www.npmjs.com/package/@mhlabs/cfn-dia
 cfn-dia draw.io -c true -t aws/stack/docs/renderedTemplates/CodeHostTemplate.yaml  -o aws/stack/docs/renderedTemplates/CodeHostTemplate.drawio
 cfn-dia draw.io -c true -t aws/stack/docs/renderedTemplates/HostTemplate.yaml  -o aws/stack/docs/renderedTemplates/HostTemplate.drawio
 ```
-![](C:\data5hp\training\projects\paramicons\aws\stack\docs\renderedTemplates\HostTemplate.drawio.svg)
+![](aws/stack/docs/renderedTemplates/HostTemplate.drawio.svg)
 
 ## TODO (next)
 ### Include code build in deployment script
