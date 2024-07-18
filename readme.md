@@ -33,7 +33,6 @@ Similarly [StaticWebsiteResources.kt](aws/stack/src/main/kotlin/com/typedpath/st
 
 diagram generated with this util:  https://www.npmjs.com/package/@mhlabs/cfn-diagram
 ```
-cfn-dia draw.io -c true -t aws/stack/docs/renderedTemplates/CodeHostTemplate.yaml  -o aws/stack/docs/renderedTemplates/CodeHostTemplate.drawio
 cfn-dia draw.io -c true -t aws/stack/docs/renderedTemplates/HostTemplate.yaml  -o aws/stack/docs/renderedTemplates/HostTemplate.drawio
 ```
 ![](aws/stack/docs/renderedTemplates/HostTemplate.drawio.svg)
