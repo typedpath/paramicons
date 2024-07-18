@@ -3,5 +3,5 @@ Resources:
   functionCodeBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: 'code.devparamicons.testedsoftware.org'
+      BucketName: 'code.paramicons.testedsoftware.org'
 Transform: 'AWS::Serverless-2016-10-31'
