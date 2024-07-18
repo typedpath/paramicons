@@ -1,4 +1,4 @@
-# [Paramicons](https://paramicons.testedsoftware.org/)
+# [Paramicons - paramicons.testedsoftware.org](https://paramicons.testedsoftware.org/)
 
 This repo is for fun but also because . . . 
 - Icons should be parameterised
@@ -12,7 +12,7 @@ This repo is for fun but also because . . .
 
 ## UI
 
-The ui is deployed here : [paramicons.testedsoftware.org](https://paramicons.testedsoftware.org/)
+The ui is deployed here : [paramicons.testedsoftware.org](https://paramicons.testedsoftware.org/), the dev site is here: [devparamicons.testedsoftware.org](https://devparamicons.testedsoftware.org/)
 The ui code is here [param-icons](ui/param-icons). Its built with npm version 8.6.0.
 This is structured as library + example app.  
 The app presents param icons located in the library exposed via metadata defined in file [Property.tsx](ui/param-icons/src/iconz/Property.tsx). This arrangement is to enable development of multiple, versioned paramicons libraries that can be accessed from 1 app.
@@ -25,7 +25,7 @@ See code here: [SvgThumbnailHandler](aws/svgthumbnailer/src/main/kotlin/org/test
 
 ## Infrastructure
 
-Infrastructure is deployed via main program [DevDeployment.kt](aws/stack/src/main/kotlin/com/typedpath/stack/DevDeployment.kt).
+Infrastructure is deployed via main program [MainDeployment.kt](aws/stack/src/main/kotlin/com/typedpath/stack/DevDeployment.kt).
 Its run with java 17.
 The stack is: **Route 53 Record Set** = points to => **Cloudfront Distribution** ==uses origins => **S3 bucket**, **lambda function**.  Its defined using kotlin DSL [cloudformation2kotlin](https://github.com/typedpath/cloudformation2kotlin).
 File [CloudFormationUtil.kt]([cloudformation2kotlin](https://github.com/typedpath/cloudformation2kotlin) ) does not belong here - it should be in [cloudformation2kotlin](https://github.com/typedpath/cloudformation2kotlin) 
