@@ -42,4 +42,4 @@ cfn-dia draw.io -c true -t aws/stack/docs/renderedTemplates/HostTemplate.yaml  -
 ### Facebook , X Share
 ### Cost Prediction
 ### Rate Limiting 
-review https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/WAF-one-click-rate-limiting.html
+review  https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/WAF-one-click-rate-limiting.html
