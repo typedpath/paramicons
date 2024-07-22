@@ -3,6 +3,8 @@ plugins {
     id("java")
 }
 
+val ktor_version: String by project
+
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
@@ -17,6 +19,12 @@ repositories {
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+
+    testImplementation("io.ktor:ktor-client-core:$ktor_version")
+    testImplementation("io.ktor:ktor-client-cio:$ktor_version")
+
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
+
 
     implementation("com.amazonaws:aws-java-sdk-s3:1.11.574")
     implementation("com.amazonaws:aws-java-sdk-cloudformation:1.11.574")
