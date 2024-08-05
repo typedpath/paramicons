@@ -3,6 +3,7 @@ package com.typedpath.stack.performance
 import io.ktor.client.HttpClient
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -11,7 +12,12 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-suspend fun speedTest(client: HttpClient=HttpClient(CIO) , url: String,  concurrents: Int, targetCalls: Int) {
+suspend fun speedTest(client: HttpClient=HttpClient(CIO) {
+    install(HttpTimeout) {
+        requestTimeoutMillis = 20000
+        connectTimeoutMillis = 20000
+    }
+}, url: String,  concurrents: Int, targetCalls: Int) {
     var id = "PolarRadialCon2.0"
     val params =
         """{"rotationalFrequency":19,"radialFrequency":10,"angleDegrees":90,"unit":300,"clipRadius":600,"loading":true,"spokeAngle0":300,"spokeAngle1":60,"spokeUnit":400,"fillColours":["#BFFF91","#2C4E31","#82A882","#8AD6B0","#183321","#0A6441","#152FC3"],"pageWidth":300,"pageHeight":300,"radialColourGradient":true,"highlightedProperty":"radialFrequency"}"""
@@ -38,7 +44,7 @@ suspend fun speedTest(client: HttpClient=HttpClient(CIO) , url: String,  concurr
     println("completed $targetCalls in ${System.currentTimeMillis()-start}ms")
 }
 
-val url="https://paramicons.testedsoftware.org/share/svgthumbnail"
+val url="https://devparamicons.testedsoftware.org/share/svgthumbnail"
 
 fun main() {
 

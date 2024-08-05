@@ -15,7 +15,7 @@ export interface Property {
   get: (target: any) => any
 }
 
-function property(name: string, type: string, description: string) : Property {
+export function property(name: string, type: string, description: string) : Property {
   return {
   name: name,
    description: description,
@@ -25,6 +25,12 @@ function property(name: string, type: string, description: string) : Property {
   }
 }
 
+export interface AnimationParams {
+  frameCount: number;
+  msDuration: number;
+  phaseAngle: number;
+}
+
 export interface MetaData {
   id: string,
   description: string,
@@ -32,7 +38,13 @@ export interface MetaData {
   defaultParams: MultiShapeParams;
   render: (ps: MultiShapeParams) => JSX.Element;
   sampleParams: MultiShapeParams[];
+  animationParams: ((params: MultiShapeParams) => AnimationParams) | null;
 }
+
+export interface Paramicon {
+  metaData: MetaData,
+  params: MultiShapeParams
+} 
 
 export const blockconParamsProperties: Property[] = [
   property('loading', 'boolean', 'Loading ... '),
@@ -78,7 +90,9 @@ export const blockconMetaData: MetaData =
                   horizontalCount={(ps as BlockConParams).horizontalCount}
                   verticalCount={(ps as BlockConParams).verticalCount}
      />
-  }
+  },
+  animationParams: null
+
 }
 
 export const circlyIconParamsProperties: Property[] = [
@@ -127,7 +141,9 @@ export const circlyIconMetaData: MetaData =
                   decreaseRatio={(ps as CirclyconParams).decreaseRatio}
                   depth={(ps as CirclyconParams).depth}
      />
-  }
+  },
+  animationParams: null
+
 }
 
 export const polarRadial2ConParamsProperties: Property[] = [
@@ -220,7 +236,7 @@ const defaultPolarRadialCon2Params6 = function () {
   return result;
 }() 
 
-const defaultPolarRadialCon2Params7 = function () {
+export const defaultPolarRadialCon2Params7 = function () {
   const result = cloneParams(defaultPolarRadialCon2Params2) as PolarRadialCon2Params;
   result.unit=3000;
   result.clipRadius=4000;
@@ -246,7 +262,7 @@ const defaultPolarRadialCon2Params8 = function () {
   return result;
 }() 
 
-const defaultPolarRadialCon2Params9 = function () {
+export const defaultPolarRadialCon2Params9 = function () {
   const result = cloneParams(defaultPolarRadialCon2Params2) as PolarRadialCon2Params;
   result.unit=30;
   result.clipRadius=400;
@@ -287,7 +303,8 @@ export const polarRadialCon2MetaData: MetaData =
           clipRadius={ (ps as PolarRadialCon2Params).clipRadius }
           radialColourGradient={ (ps as PolarRadialCon2Params).radialColourGradient }
           />
-  }
+  },
+  animationParams: null
 }
 
 export const polarRadialConParamsProperties: Property[] = [
@@ -314,7 +331,8 @@ export const polarRadialConMetaData: MetaData =
           pageHeight = {ps.pageHeight}
           pageWidth = {ps.pageWidth}
           />
-  }
+  },
+  animationParams: null
 }
 
 export const spiralConParamsProperties: Property[] = [
@@ -347,7 +365,8 @@ export const spiralConMetaData: MetaData =
           frequency = {(ps as SpiralconParams).frequency}
           depth = {(ps as SpiralconParams).depth}
           />
-  }
+  },
+  animationParams: null
 }
 
 

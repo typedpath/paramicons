@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import { Property,  MetaData, MultiShapeParams } from 'param-icons';
+import { Property,  MetaData, MultiShapeParams, transitionConMetaData } from 'param-icons';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -12,6 +12,7 @@ import ReactDOMServer from 'react-dom/server';
 
 import Stack  from '@mui/material/Stack';
 import svgThumbnail from './services/SvgThumbnailer';
+import NullableParamiconEdit from './NullableParamiconEdit';
 
 
 export interface EditParams {
@@ -30,9 +31,35 @@ const Edit = (editParams: EditParams) => {
   console.log(editParams);
   
   const [ params, setParams] = useState(paramsForEdit(editParams.params));
-
-
   const [shareData, setShareData] = useState<ShareData | null>(null)
+  const [frame, setFrame] = useState(0)
+
+  function onChange() {
+    setParams({...params})
+ }
+
+  useEffect(()=>{
+    let animationParams = editParams.metaData.animationParams && editParams.metaData.animationParams(params);
+
+    if (animationParams) {
+
+    let pollingPeriod = animationParams.msDuration / animationParams.frameCount;
+    console.log(`starting timer pollingPeriod: ${pollingPeriod} frame:${frame}`);
+    let myInterval = setInterval(() => {
+           console.log(`timer ${pollingPeriod} frame: ${frame}`);
+           
+           animationParams.phaseAngle = 720 * (frame % animationParams.frameCount) /  animationParams.frameCount;
+           onChange();
+           setFrame(frame+1);
+        }, pollingPeriod)
+        return ()=> {
+            clearInterval(myInterval);
+          };
+    } else {
+      console.log('not animated')
+    }
+});
+
 
   const onClickShare = () => {
       setShareData(shareData ? null : {link: null});
@@ -66,9 +93,7 @@ console.log("renderAsSvgString ", width, height );
   
   }  
   
-  function onChange() {
-     setParams({...params})
-  }
+
 
 
 function propertyUi(ps: Property) : JSX.Element{
@@ -96,6 +121,7 @@ useEffect( () => {
         <Button style={{textAlign: 'left'}} >
       <Typography variant="h4"  onClick={onClickShare}>{shareData? "Edit" : "Share"}</Typography>
         </Button>
+     {editParams.metaData.animationParams && "Animated" }   
      {shareData && (shareData.link ? <ShareView link={shareData.link}></ShareView> : "building share link . . .")}   
      {editParams.metaData.render(params)}
      {!shareData && editParams.metaData.properties.map(ps => propertyUi(ps)) }
@@ -148,6 +174,20 @@ useEffect( () => {
       }} />
     }
     
+
+    function editNullableParamicon(params: MultiShapeParams,  onChangeIn: () => void, prop: Property, key: string) : JSX.Element {
+
+       let metaDatas = [transitionConMetaData]
+
+      const current: EditParams | null = prop.get(params);
+      const onChange = (p: EditParams | null) => {
+        prop.set(params, p);
+        onChangeIn();
+      } 
+  return <NullableParamiconEdit metaDatas={metaDatas} editParams={current} onChange={onChange} inEditDefault={false}/>
+      }
+      
+  
   function edit(params: MultiShapeParams,  onChange: () => void, prop: Property, key: string) : JSX.Element {
     var field;
   
@@ -155,7 +195,9 @@ useEffect( () => {
       field = editBoolean(params, onChange, prop, key);
     } else if (prop.type=='colourList') {
       field = editColourList(params, onChange, prop, key);
-    } else {
+    } else if (prop.type=='NullableParamicon') {
+      field = editNullableParamicon(params, onChange, prop, key);
+    }else {
     field = editText(params, onChange, prop, key);
    }
   return field;

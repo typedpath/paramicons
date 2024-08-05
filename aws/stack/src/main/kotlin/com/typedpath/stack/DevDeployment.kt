@@ -10,8 +10,8 @@ val devStackParams = StackParams(region=Regions.US_EAST_1, name ="devparamicons"
 
 fun main() {
     //deployCode(devStackParams)
-    //deployInfrastructure(devStackParams)
-    deployUiCode(devStackParams)
+    deployInfrastructure(devStackParams)
+    //deployUiCode(devStackParams)
     //renderTemplatesToDocs(devStackParams)
 }
 
