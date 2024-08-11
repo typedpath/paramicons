@@ -64,7 +64,7 @@ function toggleEdit() {
     </CardContent>
     </Card>
     }
-
+console.log(`inEdit: ${inEdit} metaDatas: ${metaDatas}`, metaDatas)
   return <Fragment>
   {<Button onClick={toggleEdit}>{ inEdit?"Close Edit":"Edit"}</Button>}
   {inEdit && editParams && 

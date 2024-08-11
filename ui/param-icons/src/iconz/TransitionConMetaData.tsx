@@ -1,4 +1,6 @@
-import { defaultPolarRadialCon2Params7, defaultPolarRadialCon2Params9, MetaData, polarRadialCon2MetaData, Property, property } from "./Property"
+import { defaultPolarRadialCon2Params7, defaultPolarRadialCon2Params9, MetaData, polarRadialCon2MetaData, 
+  defaultBlockconParams, defaultBlockconParams2, blockconMetaData,
+  Property, property } from "./Property"
 import { TransitionCon, TransitionConParams } from "./TransitionCon"
 import { AnimationParams } from './Property'
 
@@ -24,6 +26,17 @@ const transitionConParams: TransitionConParams = {
   msDuration:5000
 } 
 
+const transitionConParamsBlock: TransitionConParams = {
+  angleDegrees: 90,
+  loading: false,
+  fillColours: ["lime", "blue", "red", "green", "purple", "gray", "orange", "cyan", "violet", "brown"],
+  paramicon0: {params: defaultBlockconParams, metaData: blockconMetaData},
+  paramicon1: {params: defaultBlockconParams2, metaData: blockconMetaData},
+  phaseAngle: 0.0,
+  frameCount: 100,
+  msDuration:5000
+} 
+
 export const transitionConMetaData: MetaData =
   {
     // change this if backward compatibility is an issue only
@@ -31,7 +44,7 @@ export const transitionConMetaData: MetaData =
     description: "Transition Con",
     properties: transitionConParamsProperties,
     defaultParams: transitionConParams, 
-    sampleParams : [{...transitionConParams}],
+    sampleParams : [{...transitionConParams}, {...transitionConParamsBlock}],
     render:  (ps) => {
           return <TransitionCon 
           pageHeight = {ps.pageHeight}

@@ -53,21 +53,21 @@ export const blockconParamsProperties: Property[] = [
   property('fillColours', 'colourList', 'Fill Colours')
 ]
 
-const defaultBlockconParams: BlockConParams = {
+export const defaultBlockconParams: BlockConParams = {
   horizontalCount: 3,
   verticalCount: 3,
   loading: false,
   fillColours: ["lime", "blue", "red", "green", "purple", "gray", "orange", "cyan", "violet", "brown"]
 } 
 
-const defaultBlockconParams2: BlockConParams = {
+export const defaultBlockconParams2: BlockConParams = {
   horizontalCount: 34,
   verticalCount: 32,
   loading: false,
   fillColours: ["lime", "blue", "red", "green", "purple", "gray", "orange", "cyan", "violet", "brown"]
 } 
 
-const defaultBlockconParams3: BlockConParams = {
+export const defaultBlockconParams3: BlockConParams = {
   horizontalCount: 7,
   verticalCount: 6,
   loading: false,

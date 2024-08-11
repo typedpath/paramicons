@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import { Property,  MetaData, MultiShapeParams, transitionConMetaData } from 'param-icons';
+import { Property,  MetaData, MultiShapeParams, transitionConMetaData, circlyIconMetaData, polarRadialCon2MetaData, blockconMetaData, polarRadialConMetaData, spiralConMetaData } from 'param-icons';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -48,7 +48,7 @@ const Edit = (editParams: EditParams) => {
     let myInterval = setInterval(() => {
            console.log(`timer ${pollingPeriod} frame: ${frame}`);
            
-           animationParams.phaseAngle = 720 * (frame % animationParams.frameCount) /  animationParams.frameCount;
+           animationParams.phaseAngle = 360 * (frame % animationParams.frameCount) /  animationParams.frameCount;
            onChange();
            setFrame(frame+1);
         }, pollingPeriod)
@@ -121,7 +121,6 @@ useEffect( () => {
         <Button style={{textAlign: 'left'}} >
       <Typography variant="h4"  onClick={onClickShare}>{shareData? "Edit" : "Share"}</Typography>
         </Button>
-     {editParams.metaData.animationParams && "Animated" }   
      {shareData && (shareData.link ? <ShareView link={shareData.link}></ShareView> : "building share link . . .")}   
      {editParams.metaData.render(params)}
      {!shareData && editParams.metaData.properties.map(ps => propertyUi(ps)) }
@@ -177,7 +176,8 @@ useEffect( () => {
 
     function editNullableParamicon(params: MultiShapeParams,  onChangeIn: () => void, prop: Property, key: string) : JSX.Element {
 
-       let metaDatas = [transitionConMetaData]
+       let metaDatas: MetaData[] = [circlyIconMetaData, polarRadialCon2MetaData, blockconMetaData, polarRadialConMetaData,  spiralConMetaData]
+
 
       const current: EditParams | null = prop.get(params);
       const onChange = (p: EditParams | null) => {
