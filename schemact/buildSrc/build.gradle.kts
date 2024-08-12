@@ -9,9 +9,9 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
     mavenLocal()
-    maven(uri( "https://admin.shareddev.testedsoftware.org/repository")) {
+    /*maven(uri( "https://admin.shareddev.testedsoftware.org/repository")) {
         url = uri( "https://admin.shareddev.testedsoftware.org/repository")
-    }
+    }*/
 }
 
 dependencies {

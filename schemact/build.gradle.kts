@@ -1,6 +1,3 @@
-import com.typedpath.aws.deployCode
-import com.typedpath.aws.deployInfrastructure
-import com.typedpath.aws.deployUiCode
 import paramicons.schemact.*
 
 
@@ -37,20 +34,3 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
-
-/*
-val deployTestCode = tasks.register("deployTestCode") {
-   // deployCode(paramicons, "schemactsample", thumbnailerJar)
-}
-
-val deployTestInfrastrure = tasks.register("deployInfrastructure") {
-   // deployInfrastructure(paramicons, "schemactsample", thumbnailerJar)
-}
-
-
-
-val deployTestUICode = tasks.register("deployUICode") {
-   // deployUiCode(paramicons, "schemactsample", uiCodeLocation)
-}
-
-*/
