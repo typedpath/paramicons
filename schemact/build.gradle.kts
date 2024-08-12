@@ -7,6 +7,7 @@ import paramicons.schemact.*
 plugins {
     kotlin("jvm") version "1.7.10"
     id("java")
+    id("com.typedpath.schemact4.schemact-plugin") version "1.0-SNAPSHOT"
 }
 
 group = "org.example"
@@ -15,6 +16,16 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
     mavenLocal()
+}
+
+val thumbnailerJar = File("${projectDir}/../aws/svgthumbnailer/build/libs/svgthumbnailer-1.0.12-SNAPSHOT-fat.jar")
+
+
+schemactConfig {
+    testMessage = "hello world this is the end or is it ??"
+    schemact = paramicons
+    uiCodeLocation = "${projectDir}/../ui/param-icons/example/build"
+    thumbnailerJar = "${projectDir}/../aws/svgthumbnailer/build/libs/svgthumbnailer-1.0.12-SNAPSHOT-fat.jar"
 }
 
 dependencies {
@@ -27,20 +38,19 @@ tasks.test {
     useJUnitPlatform()
 }
 
-val thumbnailerJar = File("${projectDir}/../aws/svgthumbnailer/build/libs/svgthumbnailer-1.0.12-SNAPSHOT-fat.jar")
-
+/*
 val deployTestCode = tasks.register("deployTestCode") {
-    deployCode(paramicons, "schemactsample", thumbnailerJar)
+   // deployCode(paramicons, "schemactsample", thumbnailerJar)
 }
 
 val deployTestInfrastrure = tasks.register("deployInfrastructure") {
-    deployInfrastructure(paramicons, "schemactsample", thumbnailerJar)
+   // deployInfrastructure(paramicons, "schemactsample", thumbnailerJar)
 }
 
 
-val uiCodeLocation = "${projectDir}/../ui/param-icons/example/build";
 
 val deployTestUICode = tasks.register("deployUICode") {
-    deployUiCode(paramicons, "schemactsample", uiCodeLocation)
+   // deployUiCode(paramicons, "schemactsample", uiCodeLocation)
 }
 
+*/
