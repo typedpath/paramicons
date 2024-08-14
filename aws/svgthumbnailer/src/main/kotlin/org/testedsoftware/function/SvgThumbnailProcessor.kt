@@ -1,4 +1,4 @@
-package org.testedsoftware.paramicons
+package org.testedsoftware.function
 
 import org.apache.batik.transcoder.TranscoderInput
 import org.apache.batik.transcoder.TranscoderOutput
@@ -13,7 +13,7 @@ data class Thumbnail (val indexPage: String,  val indexPageKey: String,
 // Thread.currentThread().contextClassLoader.getResource(path) might be better ?
 val indexPageTemplate = object {}.javaClass.getResource("/indexPageTemplate.html")?.readText()!!
 //val indexPageTemplate  = Thread.currentThread().contextClassLoader.getResource("/indexPageTemplate.html").readText()
-fun thumbnail(svg: String, urlRoot: String, rawQueryString:String, width: Int, height: Int) : Thumbnail{
+fun thumbnail(svg: String, urlRoot: String, rawQueryString:String, width: Int, height: Int) : Thumbnail {
     val id=UUID.randomUUID()!!
     val thumbnailImageKey = "indicies/$id.jpg"
     val indexPageKey = "indicies/$id.html"

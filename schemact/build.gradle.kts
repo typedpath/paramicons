@@ -1,4 +1,5 @@
 import paramicons.schemact.*
+import java.io.File
 
 
 plugins {
@@ -15,15 +16,15 @@ repositories {
     mavenLocal()
 }
 
-val thumbnailerJar = File("${projectDir}/../aws/svgthumbnailer/build/libs/svgthumbnailer-1.0.12-SNAPSHOT-fat.jar")
+val thumbnailerJar = File("${projectDir}/../aws/svgthumbnailer/build/libs/svgthumbnailer-1.0.14-SNAPSHOT-fat.jar")
 
 
 schemactConfig {
-    testMessage = "hello world this is the end or is it ??"
     schemact = paramicons
     uiCodeLocation = "${projectDir}/../ui/param-icons/example/build"
-    thumbnailerJar = "${projectDir}/../aws/svgthumbnailer/build/libs/svgthumbnailer-1.0.12-SNAPSHOT-fat.jar"
+    idToFunctionJars =  mapOf("thumbnail" to  File("${projectDir}/../aws/svgthumbnailer/build/libs/svgthumbnailer-1.0.14-SNAPSHOT-fat.jar"))
 }
+
 
 dependencies {
     implementation("com.typedpath:schemact4:1.0-SNAPSHOT")

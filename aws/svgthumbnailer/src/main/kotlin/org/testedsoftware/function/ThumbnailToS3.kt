@@ -1,4 +1,4 @@
-package org.testedsoftware.paramicons
+package org.testedsoftware.function
 
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.AmazonS3ClientBuilder

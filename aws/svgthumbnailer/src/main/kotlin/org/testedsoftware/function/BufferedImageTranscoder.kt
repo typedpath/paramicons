@@ -1,4 +1,4 @@
-package com.typedpath.schemact.ideplugin.svg
+package org.testedsoftware.function
 
 import org.apache.batik.transcoder.TranscoderOutput
 import org.apache.batik.transcoder.image.ImageTranscoder

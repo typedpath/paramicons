@@ -1,5 +1,6 @@
 package org.testedsoftware.paramicons
 
+import org.testedsoftware.function.thumbnail
 import java.io.File
 
 fun main() {

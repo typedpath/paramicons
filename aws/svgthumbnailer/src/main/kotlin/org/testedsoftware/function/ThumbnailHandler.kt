@@ -1,4 +1,4 @@
-package org.testedsoftware.paramicons
+package org.testedsoftware.function
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestHandler
@@ -8,7 +8,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPResponse
 //https://docs.aws.amazon.com/lambda/latest/dg/urls-invocation.html
 // https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html#http-api-develop-integrations-lambda.proxy-format
 
-class SvgThumbnailHandler : RequestHandler<APIGatewayV2HTTPEvent, APIGatewayV2HTTPResponse> {
+class ThumbnailHandler : RequestHandler<APIGatewayV2HTTPEvent, APIGatewayV2HTTPResponse> {
     override fun handleRequest(
         input: APIGatewayV2HTTPEvent?,
         context: Context?
