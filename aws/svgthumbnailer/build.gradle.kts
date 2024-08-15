@@ -6,6 +6,8 @@ plugins {
 group = "org.example"
 version = "1.0.14-SNAPSHOT"
 
+val ktor_version: String by project
+
 repositories {
     mavenCentral()
 }
@@ -21,7 +23,10 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 
+    testImplementation("io.ktor:ktor-client-core:$ktor_version")
+    testImplementation("io.ktor:ktor-client-cio:$ktor_version")
 
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
 
 }
 

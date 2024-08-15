@@ -1,4 +1,4 @@
-package com.typedpath.stack.performance
+package org.testedsoftware.paramicons.performance
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.*
@@ -49,7 +49,7 @@ val url="https://devparamicons.testedsoftware.org/share/svgthumbnail"
 fun main() {
 
     runBlocking {
-        speedTest(url=url, targetCalls = 1000, concurrents = 1)
+        speedTest(url= url, targetCalls = 100, concurrents = 1)
     }
     readln()
 }

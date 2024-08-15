@@ -14,9 +14,9 @@ export interface NullableParamiconEditParams {
    metaDatas: MetaData[],
    inEditDefault: boolean,
    onChange: (editParams: EditParams | null ) => void
-} 
+}
 
-const NullableParamiconEdit = (nullableParams: NullableParamiconEditParams 
+const NullableParamiconEdit = (nullableParams: NullableParamiconEditParams
       ) => {
   const [ inEdit, setInEdit] = useState( nullableParams.inEditDefault);
   const metaDatas = nullableParams.metaDatas;
@@ -31,7 +31,7 @@ const NullableParamiconEdit = (nullableParams: NullableParamiconEditParams
     p.pageWidth=100;
     p.pageHeight=100;
     return p;
-  }  
+  }
 
 function clear() {
   nullableParams.onChange(null)
@@ -67,15 +67,15 @@ function toggleEdit() {
 console.log(`inEdit: ${inEdit} metaDatas: ${metaDatas}`, metaDatas)
   return <Fragment>
   {<Button onClick={toggleEdit}>{ inEdit?"Close Edit":"Edit"}</Button>}
-  {inEdit && editParams && 
+  {inEdit && editParams &&
   <Fragment>
-     <Button onClick={clear}>Clear</Button> 
+     <Button onClick={clear}>Clear</Button>
      <Edit metaData={editParams.metaData} params={editParams.params}/>
    </Fragment>
   }
   {!inEdit && editParams && <span padding-right= "20" >&nbsp;{editParams.metaData.render(small(editParams.params))}</span>}
   {inEdit && !editParams &&  metaDatas.map(mt=>ui(mt, onClick))}
-  
+
   </Fragment>
 }
 
