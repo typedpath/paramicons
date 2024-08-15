@@ -1,0 +1,7 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  functionCodeBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: 'code.paramicons.testedsoftware.org'
+Transform: 'AWS::Serverless-2016-10-31'
