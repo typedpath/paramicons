@@ -5,6 +5,12 @@ plugins {
     id("com.typedpath.schemact4.schemact-plugin") version "1.0-SNAPSHOT"
 }
 
+schemactConfig {
+    schemact= paramicons
+    functions = paramicons.functions
+    codeGenerationTargetDirectory = File("${projectDir}/srcgendir ??")
+}
+
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
@@ -21,11 +27,3 @@ tasks.test {
     useJUnitPlatform()
 }
 
-schemactConfig {
-    schemact = paramicons
-    // TODO make these configs optional
-    uiCodeLocation = "N/A"
-    idToFunctionJars =  mapOf("thumbnail" to  File("${projectDir}/aws/svgthumbnailer/build/libs/svgthumbnailer-1.0.14-SNAPSHOT-fat.jar"))
-    // TODO add list of functions in this module
-
-}
