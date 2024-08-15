@@ -25,6 +25,7 @@ See code here: [SvgThumbnailHandler](aws/svgthumbnailer/src/main/kotlin/org/test
 
 ## Infrastructure
 
+TODO update this (now using schemact4)
 Infrastructure is deployed via main program [MainDeployment.kt](aws/stack/src/main/kotlin/com/typedpath/stack/DevDeployment.kt).
 Its run with java 17.
 The stack is: **Route 53 Record Set** = points to => **Cloudfront Distribution** ==uses origins => **S3 bucket**, **lambda function**.  Its defined using kotlin DSL [cloudformation2kotlin](https://github.com/typedpath/cloudformation2kotlin).
