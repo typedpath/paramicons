@@ -15,12 +15,13 @@ val rootDomain =  Domain(name = "testedsoftware.org",
 
 
 val paramicons = Schemact(
+name = "paramicons",
 domains = listOf(rootDomain),
 entities = mutableListOf(metaDataEntity, paramsEntity),
 userKeyedDatabase = UserKeyedDatabase(entities=mutableListOf(metaDataEntity, paramsEntity))
 ) {
     val sw = staticWebsite("homepage", "the main page")
-    val thumbnailerFunction = Function("svgThumbnailer",
+    val thumbnailerFunction = Function("svgThumbnail",
         description = "accepts an svg and creates an open graph friendly paramicon index page, returns index page url",
         paramType = Entity(name="param", description="Params" ) {
             string(name="svg", description="svg for rendering", maxLength = 4000)

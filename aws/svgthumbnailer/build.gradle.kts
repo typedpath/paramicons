@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+
 plugins {
     id("java")
 }
@@ -45,3 +47,4 @@ val fatJar = tasks.register<Jar>("fatJar") {
 tasks.test {
     useJUnitPlatform()
 }
+
