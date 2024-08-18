@@ -25,6 +25,7 @@ userKeyedDatabase = UserKeyedDatabase(entities=mutableListOf(metaDataEntity, par
         description = "accepts an svg and creates an open graph friendly paramicon index page, returns index page url",
         paramType = Entity(name="param", description="Params" ) {
             string(name="svg", description="svg for rendering", maxLength = 4000)
+            string(name="editParams", description="ui params for editing paramicon", maxLength = 500)
             containsOne("bucketName", description="bucketName", type=StaticWebsite.BucketName())
         },
         returnType = StringType(200)
