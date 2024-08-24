@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 
 plugins {
     kotlin("jvm") version "1.7.10"
@@ -38,9 +37,23 @@ val fatJar = tasks.register<Jar>("fatJar") {
 
     from(sourceSets.main.get().output)
 
+    println("sourceSets.main : ${sourceSets.main.javaClass} ${sourceSets.main} ")
+
+    println("sourceSets.main.get().output: ${sourceSets.main.get().output.javaClass} ${sourceSets.main.get().output}")
+
     dependsOn(configurations.runtimeClasspath)
+    //println ("configurations.runtimeClasspath: ${configurations.runtimeClasspath.javaClass} ${configurations.runtimeClasspath}")
+    println ("configurations.runtimeClasspath.get(): ${configurations.runtimeClasspath.get().javaClass} ${configurations.runtimeClasspath.get()}")
+
     from({
-        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }
+            //.onEach{ println("processing ${it.javaClass} $it")}
+            .map {
+            //println("about to zipTree ${it.javaClass} $it")
+            zipTree(it)
+           // println("Zip Treed ${it.javaClass} $it")
+
+        }
     })
 }
 

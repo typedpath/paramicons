@@ -1,4 +1,6 @@
+import paramicons.schemact.mainPage
 import paramicons.schemact.paramicons
+import paramicons.schemact.thumbnailerFunction
 
 plugins {
     kotlin("jvm") version "1.7.10"
@@ -16,8 +18,8 @@ repositories {
 
 schemactConfig {
     schemact = paramicons
-    uiCodeLocation = "${projectDir}/ui/param-icons/example/build"
-    idToFunctionJars =  mapOf("thumbnail" to  File("${projectDir}/aws/svgthumbnailer/build/libs/svgthumbnailer-1.0.14-SNAPSHOT-fat.jar"))
+    uiCodeBuildLocation = "${projectDir}/ui/param-icons/example/build"
+    functionToFunctionJars =  mapOf(thumbnailerFunction to  File("${projectDir}/aws/functions/build/libs/function-1.0-SNAPSHOT-schemact-aws-lambda"))
 }
 
 dependencies {

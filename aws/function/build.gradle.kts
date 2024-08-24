@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+import paramicons.schemact.mainPage
 import paramicons.schemact.paramicons
 
 plugins {
@@ -10,6 +11,7 @@ plugins {
 schemactConfig {
     schemact= paramicons
     functions = paramicons.functions
+    staticWebSiteToSourceRoot =  mapOf ( mainPage to File("${project.projectDir}/../../ui/param-icons/example/src"))
 }
 
 group = "org.example"
