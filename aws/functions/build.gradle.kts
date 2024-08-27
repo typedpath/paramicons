@@ -7,6 +7,8 @@ plugins {
     id("com.typedpath.schemact4.schemact-plugin") version "1.0-SNAPSHOT"
 }
 
+val ktor_version: String by project
+
 schemactConfig {
     schemact= paramicons
     functions = paramicons.functions
@@ -14,7 +16,7 @@ schemactConfig {
 }
 
 group = "org.example"
-version = "1.0.03-SNAPSHOT"
+version = "1.0.08-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -26,10 +28,18 @@ dependencies {
     implementation("org.apache.xmlgraphics:batik-all:1.17")
 
 
+    testImplementation("io.ktor:ktor-client-core:$ktor_version")
+    testImplementation("io.ktor:ktor-client-cio:$ktor_version")
+
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
+
     // TODO - these should be added by plugin
     implementation("com.amazonaws:aws-lambda-java-core:1.2.1")
     implementation("com.amazonaws:aws-lambda-java-events:3.11.0")
     implementation("com.amazonaws:aws-java-sdk-s3:1.11.574")
+
+
+
 }
 
 tasks.test {

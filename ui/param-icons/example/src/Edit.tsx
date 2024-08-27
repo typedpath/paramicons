@@ -103,7 +103,7 @@ function propertyUi(ps: Property) : JSX.Element{
 useEffect( () => {
   if (shareData!=null && !shareData.link) {
     // may need url encode !
-       let editParamsIn = `id=${editParams.metaData.id}&params=${JSON.stringify(params)}`          
+       let editParamsIn = `id=${editParams.metaData.id}&params=${encodeURI(JSON.stringify(params))}`          
        svgThumbnail( editParamsIn, renderAsSvgString(600, 600))
     
     .then( (data) =>  

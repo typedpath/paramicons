@@ -7,6 +7,6 @@ class SvgThumbnailImpl {
         println("editParams=$editParams")
         println("bucketName=$bucketName")
         return thumbnailToS3(bucketName=bucketName, svg,  urlRoot = "https://$bucketName",
-            width = 256, height = 256, rawQueryString =  "?$editParams")
+            width = 256, height = 256, rawQueryString =  editParams)
     }
 }
