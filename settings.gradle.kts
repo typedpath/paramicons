@@ -10,5 +10,5 @@ pluginManagement {
         mavenLocal()
     }
 }
-include("aws:function")
-findProject(":aws:function")?.name = "function"
+include("aws:functions")
+findProject(":aws:functions")?.name = "functions"

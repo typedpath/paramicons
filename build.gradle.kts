@@ -19,7 +19,8 @@ repositories {
 schemactConfig {
     schemact = paramicons
     uiCodeBuildLocation = "${projectDir}/ui/param-icons/example/build"
-    functionToFunctionJars =  mapOf(thumbnailerFunction to  File("${projectDir}/aws/functions/build/libs/function-1.0-SNAPSHOT-schemact-aws-lambda"))
+    functionToFunctionJars =  mapOf(thumbnailerFunction to
+            File("${projectDir}/aws/functions/build/libs/functions-1.0.03-SNAPSHOT-schemact-aws-lambda.jar"))
 }
 
 dependencies {

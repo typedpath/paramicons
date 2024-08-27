@@ -11,7 +11,7 @@ import ColourListSvg from './ColourListSvg';
 import ReactDOMServer from 'react-dom/server';
 
 import Stack  from '@mui/material/Stack';
-import svgThumbnail from './services/SvgThumbnailer';
+import svgThumbnail  from './functions/svgThumbnail';
 import NullableParamiconEdit from './NullableParamiconEdit';
 
 
@@ -101,7 +101,11 @@ function propertyUi(ps: Property) : JSX.Element{
 }
  
 useEffect( () => {
-  if (shareData!=null && !shareData.link) svgThumbnail(renderAsSvgString(600, 600), editParams.metaData.id, params)
+  if (shareData!=null && !shareData.link) {
+    // may need url encode !
+       let editParamsIn = `id=${editParams.metaData.id}&params=${JSON.stringify(params)}`          
+       svgThumbnail( editParamsIn, renderAsSvgString(600, 600))
+    
     .then( (data) =>  
     {
     setShareData({link: data.toString()})
@@ -111,6 +115,7 @@ useEffect( () => {
     setParams(newParams) ;
     }
   );
+}
 }
 );
 

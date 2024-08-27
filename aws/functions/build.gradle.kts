@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import paramicons.schemact.mainPage
 import paramicons.schemact.paramicons
 
@@ -15,7 +14,7 @@ schemactConfig {
 }
 
 group = "org.example"
-version = "1.0-SNAPSHOT"
+version = "1.0.03-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -24,6 +23,8 @@ repositories {
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    implementation("org.apache.xmlgraphics:batik-all:1.17")
+
 
     // TODO - these should be added by plugin
     implementation("com.amazonaws:aws-lambda-java-core:1.2.1")
