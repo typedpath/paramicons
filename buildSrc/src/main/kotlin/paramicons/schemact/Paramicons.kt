@@ -26,7 +26,7 @@ val thumbnailerFunction = Function("svgThumbnail",
 )
 
 val functionsModule = Module(name= "functions",
-    version = "1.0.09-SNAPSHOT",
+    version = "1.0.10-SNAPSHOT",
     functions = mutableListOf(thumbnailerFunction))
 
 lateinit var  mainPage : StaticWebsite
