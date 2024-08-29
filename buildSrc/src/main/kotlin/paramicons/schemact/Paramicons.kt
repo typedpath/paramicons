@@ -3,6 +3,7 @@ package paramicons.schemact
 import schemact.domain.*
 import schemact.domain.Function
 import schemact.domain.Language.Typescript
+import schemact.domain.Module
 import schemact.domain.string
 
 val rootDomain =  Domain(name = "testedsoftware.org",
@@ -24,17 +25,23 @@ val thumbnailerFunction = Function("svgThumbnail",
     returnType = StringType(200)
 )
 
+val functionsModule = Module(name= "functions",
+    version = "1.0.09-SNAPSHOT",
+    functions = mutableListOf(thumbnailerFunction))
+
 lateinit var  mainPage : StaticWebsite
 
 val paramicons = Schemact(
 name = "paramicons",
 domains = listOf(rootDomain),
 entities = mutableListOf(metaDataEntity, paramsEntity),
-userKeyedDatabase = UserKeyedDatabase(entities=mutableListOf(metaDataEntity, paramsEntity))
+userKeyedDatabase = UserKeyedDatabase(entities=mutableListOf(metaDataEntity, paramsEntity)),
+modules = mutableListOf(functionsModule)
 ) {
     mainPage = staticWebsite("mainPage", "the main page") {
         client(thumbnailerFunction, Typescript)
     }
+    //TODO - is this neccessary - since every function has to be in a module ?
     function(thumbnailerFunction)
 }
 

@@ -1,5 +1,4 @@
 rootProject.name = "paramicons"
-include("aws")
 
 
 pluginManagement {
@@ -8,5 +7,5 @@ pluginManagement {
         mavenLocal()
     }
 }
-include("aws:functions")
-findProject(":aws:functions")?.name = "functions"
+include(":functions")
+findProject(":functions")?.name = "functions"

@@ -1,3 +1,4 @@
+import paramicons.schemact.functionsModule
 import paramicons.schemact.mainPage
 import paramicons.schemact.paramicons
 
@@ -11,8 +12,8 @@ val ktor_version: String by project
 
 schemactConfig {
     schemact= paramicons
-    functions = paramicons.functions
-    staticWebSiteToSourceRoot =  mapOf ( mainPage to File("${project.projectDir}/../../ui/param-icons/example/src"))
+    module = functionsModule
+    staticWebSiteToSourceRoot =  mapOf ( mainPage to File("${project.projectDir}/../ui/param-icons/example/src"))
 }
 
 group = "org.example"
