@@ -8,9 +8,6 @@ plugins {
     id("com.typedpath.schemact4.schemact-plugin") version "1.0-SNAPSHOT"
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
-
 repositories {
     mavenCentral()
     mavenLocal()
@@ -19,10 +16,6 @@ repositories {
 schemactConfig {
     schemact = paramicons
     uiCodeBuildLocation = "${projectDir}/ui/param-icons/example/build"
-}
-
-dependencies {
-
 }
 
 tasks.test {

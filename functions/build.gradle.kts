@@ -16,9 +16,6 @@ schemactConfig {
     staticWebSiteToSourceRoot =  mapOf ( mainPage to File("${project.projectDir}/../ui/param-icons/example/src"))
 }
 
-group = "org.example"
-version = "1.0.08-SNAPSHOT"
-
 repositories {
     mavenCentral()
 }
