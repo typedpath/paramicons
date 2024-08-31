@@ -25,9 +25,20 @@ val thumbnailerFunction = Function("svgThumbnail",
     returnType = StringType(200)
 )
 
+val thumbnailerExtraFunction = Function("svgThumbnailExtra",
+    description = "accepts an svg and open graph details creates an open graph friendly paramicon index page, returns index page url",
+    paramType = Entity(name="paramExtra", description="Params" ) {
+        string(name="svg", description="svg for rendering", maxLength = 4000)
+        string(name="editParams", description="ui params for editing paramicon", maxLength = 500)
+        containsOne(name = "bucketName", description="bucketName", type=StaticWebsite.BucketName())
+        containsOne(name = "openGraphTagging", description="Open Graph details", type=OpenGraphSchema.OpenGraphTagging)
+    },
+    returnType = StringType(200)
+)
+
 val functionsModule = Module(name= "functions",
-    version = "1.0.11-SNAPSHOT",
-    functions = mutableListOf(thumbnailerFunction))
+    version = "1.0.15-SNAPSHOT",
+    functions = mutableListOf(thumbnailerFunction, thumbnailerExtraFunction))
 
 lateinit var  mainPage : StaticWebsite
 
@@ -40,6 +51,7 @@ modules = mutableListOf(functionsModule)
 ) {
     mainPage = staticWebsite("mainPage", "the main page") {
         client(thumbnailerFunction, Typescript)
+        client(thumbnailerExtraFunction, Typescript)
     }
     //TODO - is this neccessary - since every function has to be in a module ?
     function(thumbnailerFunction)
