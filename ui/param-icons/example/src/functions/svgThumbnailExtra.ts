@@ -25,6 +25,7 @@ export default async function svgThumbnailExtra(editParams_in: string, svg_in: s
 
 export interface OpenGraphTagging   {
      title: string
+    description: string
     type: string
     url: string
     image:  {

@@ -31,13 +31,14 @@ val thumbnailerExtraFunction = Function("svgThumbnailExtra",
         string(name="svg", description="svg for rendering", maxLength = 4000)
         string(name="editParams", description="ui params for editing paramicon", maxLength = 500)
         containsOne(name = "bucketName", description="bucketName", type=StaticWebsite.BucketName())
+        // TODO this arg should be a view of OpenGraphSchema - not all the fields are interesting to the client- implement views
         containsOne(name = "openGraphTagging", description="Open Graph details", type=OpenGraphSchema.OpenGraphTagging)
     },
     returnType = StringType(200)
 )
 
 val functionsModule = Module(name= "functions",
-    version = "1.0.15-SNAPSHOT",
+    version = "1.0.19-SNAPSHOT",
     functions = mutableListOf(thumbnailerFunction, thumbnailerExtraFunction))
 
 lateinit var  mainPage : StaticWebsite

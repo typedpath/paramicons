@@ -8,9 +8,9 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { Button } from "@material-ui/core";
 
-import ReactDOMServer from 'react-dom/server';
-import { ShareData, ShareView } from "./Share";
+import { defaultOpenGraphTagging, ShareData, ShareView } from "./Share";
 import svgThumbnail from "./functions/svgThumbnail";
+import { renderAsSvgString } from "./renderUtil";
 
 
 export interface NullableParamiconEditParams {
@@ -25,8 +25,9 @@ const NullableParamiconEdit = (nullableParams: NullableParamiconEditParams
   const [ inEdit, setInEdit] = useState( nullableParams.inEditDefault);
   const metaDatas = nullableParams.metaDatas;
   const editParams = nullableParams.editParams;
-  const [shareData, setShareData] = useState<ShareData | null>(null)
-
+//  const [shareData, setShareData] = useState<ShareData | null>(null)
+const [inShare, setInShare] = useState(false) 
+const [useExtraShare, setUseExtraShare] = useState(false) 
 
   const onClick = (metaData: MetaData, ps: MultiShapeParams) => {
     console.log("calling on change")
@@ -46,18 +47,10 @@ function toggleEdit() {
   setInEdit(!inEdit)
 }
 
-function renderAsSvgString(width: number, height: number, editParams: EditParams) : string {
-  const renderPs = {...editParams?.params} 
-  renderPs.pageHeight=height;
-  renderPs.pageWidth=width;
-console.log("renderAsSvgString ", width, height );
-  const el: JSX.Element = editParams.metaData.render(renderPs);
-  return  ReactDOMServer.renderToStaticMarkup(el);
-}
 
 const onClickDownload = () => {
 
-  let strEl = renderAsSvgString(600, 600, editParams!!)
+  let strEl = renderAsSvgString(600, 600, editParams?.metaData!!, editParams?.params!!)
 
   const blob = new Blob([strEl]);
   const fileDownloadUrl = URL.createObjectURL(blob);
@@ -72,39 +65,25 @@ const onClickDownload = () => {
 }  
 
 const onClickShare = () => {
-  setShareData(shareData ? null : {link: null});
+  setInShare(!inShare)
+  setUseExtraShare(false)
   //console.log("onClickShare: shareData:", shareData)
   //let newParams = {...params};
   //newParams.loading=!shareData;
   //setParams(newParams) ;
 }
 
-
-useEffect( () => {
-
-  if (shareData!=null && !shareData.link && editParams) {
-     
-    // may need url encode !
-       let editParamsIn = `id=${editParams.metaData.id}&params=${encodeURI(JSON.stringify(editParams.params))}`          
-       svgThumbnail( editParamsIn, renderAsSvgString(600, 600, editParams))
-    
-    .then( (data) =>  
-    {
-    setShareData({link: data.toString()})
-    console.log('share.link:', data)
-   // let newParams = {...editParams.params};
-   // newParams.loading=false;
-   // setParams(newParams) ;
-    }
-  );
+const onClickShareExtra = () => {
+  setInShare(!inShare)
+  setUseExtraShare(true)
 }
-}
-);
+
+
 
 
 
   function ui(metaData: MetaData, onClickIn: (metaData: MetaData, ps: MultiShapeParams)=>void) : JSX.Element{
-   console.log("shareData", shareData)
+   console.log("shareData", inShare)
    return <Card variant={"outlined"}>
     <CardContent>
       <Typography gutterBottom variant="h5" component="h2">
@@ -135,8 +114,10 @@ console.log(`inEdit: ${inEdit} metaDatas: ${metaDatas}`, metaDatas)
      <Button onClick={clear}>Clear</Button>
      <Button onClick={onClickDownload}>Download</Button>
      <Button onClick={onClickShare}>Share</Button>
-     {shareData && (shareData.link ?
-       <ShareView link={shareData.link}></ShareView> : <Button>building share link . . .</Button>) }
+     <Button onClick={onClickShareExtra}>Shar-Xtra</Button>
+
+     {inShare && 
+       <ShareView metaData={editParams.metaData} params={editParams.params} useExtraShare={useExtraShare}></ShareView>   }
      <Edit metaData={editParams.metaData} params={editParams.params}/>
    </Fragment>
 }

@@ -8,8 +8,6 @@ import java.io.ByteArrayOutputStream
 import java.util.*
 
 
-data class Thumbnail (val indexPage: String,  val indexPageKey: String,
-                      val thumbnailImage: ByteArray, val thumbnailImageKey: String, val id: String)
 // Thread.currentThread().contextClassLoader.getResource(path) might be better ?
 val indexPageTemplate = object {}.javaClass.getResource("/indexPageTemplate.html")?.readText()!!
 //val indexPageTemplate  = Thread.currentThread().contextClassLoader.getResource("/indexPageTemplate.html").readText()
