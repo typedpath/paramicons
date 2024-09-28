@@ -8,11 +8,14 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
-    mavenLocal()
+    maven {
+        name = "schemact4"
+        url = uri("https://schemact4code.typedpath.com/repository")
+    }
 }
 
 dependencies {
-    implementation("com.typedpath:schemact4:1.0-SNAPSHOT")
+    implementation("com.typedpath:schemact4:1.0.0")
 }
 
 tasks.test {

@@ -1,16 +1,13 @@
-import paramicons.schemact.mainPage
 import paramicons.schemact.paramicons
-import paramicons.schemact.thumbnailerFunction
 
 plugins {
     kotlin("jvm") version "1.7.10"
     id("java")
-    id("com.typedpath.schemact4.schemact-plugin") version "1.0-SNAPSHOT"
+    id("com.typedpath.schemact4.schemact-plugin") version "1.0.0"
 }
 
 repositories {
     mavenCentral()
-    mavenLocal()
 }
 
 schemactConfig {
