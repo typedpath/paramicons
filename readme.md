@@ -35,8 +35,9 @@ The (schemact4) model defining the project architecture is defined here: [parami
 
 
 These are the steps for building and deployment:
-  - run script [buildUiCode.sh]() 
-  - run gradle task **schemact_<_deploymentName_>** e.g. **schemact_devparamicons**
+  - run script [buildUiCode.sh] 
+  - run gradle task **<_deploymentName_>_buildAndDeploy** in group **schemact_deployment_<_deploymentName_>** 
+     - e.g. **devparamicons_buildAndDeploy** in group **schemact_deployment_devparamicons**
 
 
 The stack is: **Route 53 Record Set** = points to => **Cloudfront Distribution** ==uses origins => **S3 bucket**, **lambda function**.
