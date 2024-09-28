@@ -1,0 +1,9 @@
+version: 0.2
+phases:
+  build:
+    commands:
+      - echo "Lets go team paramicons"
+      - . ./gradlew devparamicons_buildAndDeploy
+      - echo "just did devparamicons_buildAndDeploy whats next"
+      - . ./gradlew devparamicons_deployUiCode
+      - echo "just did devparamicons_deployUiCode whats next"
