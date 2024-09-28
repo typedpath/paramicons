@@ -3,7 +3,6 @@ phases:
   build:
     commands:
       - echo "Lets go team paramicons"
-      - gradle devparamicons_buildAndDeploy
+      - gradle devparamicons_deployCode
       - echo "just did devparamicons_buildAndDeploy whats next"
-      - gradle devparamicons_deployUiCode
-      - echo "just did devparamicons_deployUiCode whats next"
+
