@@ -19,17 +19,27 @@ The app presents param icons located in the library exposed via metadata defined
 
 ## Server
 The ui code is served using a standard AWS S3 static website pattern.
-Whatsapp sharing is enabled by a single lambda function (**svgThumbnailer**) located at deveparamicons.testedsoftware.org/share/.
-This function maps ui created svgs into static content that works with the Whatsapp webcrawler.
-See code here: [SvgThumbnailHandler](aws/svgthumbnailer/src/main/kotlin/org/testedsoftware/paramicons/SvgThumbnailHandler.kt) 
+Whatsapp sharing is enabled by lambda functions (**svgThumbnailer**, **svgThumbnailerExtra**) located at paramicons.testedsoftware.org/functions/.
+These functions maps ui created svgs into static content that works with the Whatsapp webcrawler.
+See code here:  [SvgThumbnailImpl](functions/src/main/kotlin/org/testedsoftware/paramicons/SvgThumbnailImpl.kt), [SvgThumbnailExtraImpl](functions/src/main/kotlin/org/testedsoftware/paramicons/SvgThumbnailExtraImpl.kt)
 
-## Infrastructure
+## Code Build / Infrastructure / Deployment
 
-Infrastructure is deployed via main program [MainDeployment.kt](aws/stack/src/main/kotlin/com/typedpath/stack/DevDeployment.kt).
-Its run with java 17.
-The stack is: **Route 53 Record Set** = points to => **Cloudfront Distribution** ==uses origins => **S3 bucket**, **lambda function**.  Its defined using kotlin DSL [cloudformation2kotlin](https://github.com/typedpath/cloudformation2kotlin).
-File [CloudFormationUtil.kt]([cloudformation2kotlin](https://github.com/typedpath/cloudformation2kotlin) ) does not belong here - it should be in [cloudformation2kotlin](https://github.com/typedpath/cloudformation2kotlin) 
-Similarly [StaticWebsiteResources.kt](aws/stack/src/main/kotlin/com/typedpath/stack/StaticWebsiteResources.kt) does not belong in this repo as it defines a generic aws static website hosting.
+Deployment including code and infrastructure build is via gradle plugin [**schemact4**](https://github.com/typedpath/schemact4). 
+This plugin deals with:
+   - deploying infrastructure in aws
+   - code generation of typescript lambda function clients 
+   - code generation of lambda function wrappers  
+   - build and deployment of code.
+The (schemact4) model defining the project architecture is defined here: [paramicons.kt](buildSrc/src/main/kotlin/paramicons/schemact/Paramicons.kt)   
+
+
+These are the steps for building and deployment:
+  - run script [buildUiCode.sh]() 
+  - run gradle task **schemact_<_deploymentName_>** e.g. **schemact_devparamicons**
+
+
+The stack is: **Route 53 Record Set** = points to => **Cloudfront Distribution** ==uses origins => **S3 bucket**, **lambda function**.
 
 diagram generated with this util:  https://www.npmjs.com/package/@mhlabs/cfn-diagram
 ```
@@ -38,7 +48,7 @@ cfn-dia draw.io -c true -t aws/stack/docs/renderedTemplates/HostTemplate.yaml  -
 ![](aws/stack/docs/renderedTemplates/HostTemplate.drawio.svg)
 
 ## TODO (next)
-### Include code build in deployment script
+### ~~Include code build in deployment script~~
 ### Facebook , X Share
 ### Cost Prediction
 ### Rate Limiting 
