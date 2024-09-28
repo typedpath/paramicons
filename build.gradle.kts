@@ -12,7 +12,7 @@ repositories {
 
 schemactConfig {
     schemact = paramicons
-    uiCodeBuildLocation = "${projectDir}/ui/param-icons/example/build"
+    //uiCodeBuildLocation = "${projectDir}/ui/param-icons/example/build"
     uiCodeBuildScript = """
 export NODE_OPTIONS=--openssl-legacy-provider        
 cd ui/param-icons
