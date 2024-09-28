@@ -25,7 +25,7 @@ See code here:  [SvgThumbnailImpl](functions/src/main/kotlin/org/testedsoftware/
 
 ## Code Build / Infrastructure / Deployment
 
-Deployment including code and infrastructure build is via gradle plugin **schemact4**. 
+Deployment including code and infrastructure build is via gradle plugin [**schemact4**](https://github.com/typedpath/schemact4). 
 This plugin deals with:
    - deploying infrastructure in aws
    - code generation of typescript lambda function clients 
@@ -33,10 +33,6 @@ This plugin deals with:
    - build and deployment of code.
 The (schemact4) model defining the project architecture is defined here: [paramicons.kt](buildSrc/src/main/kotlin/paramicons/schemact/Paramicons.kt)   
 
-Schemact4 is not deployed to a public repo so downloading and local deployment the 2 modules in this project is necessary.
-
-The steps for building schemact4 to local repo are described here:
-https://github.com/typedpath/schemact4/blob/main/localdeployment.md
 
 These are the steps for building and deployment:
   - run script [buildUiCode.sh]() 
