@@ -2,7 +2,8 @@ version: 0.2
 phases:
   install:
     commands:
-      - yum install nodejs
+      - n install 18
+      - node --version
   build:
     commands:
       - echo "Lets go team paramicons  x"
