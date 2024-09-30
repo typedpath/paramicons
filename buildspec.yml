@@ -1,5 +1,8 @@
 version: 0.2
 phases:
+  install:
+    commands:
+      - sudo yum install nodejs
   build:
     commands:
       - echo "Lets go team paramicons  x"
