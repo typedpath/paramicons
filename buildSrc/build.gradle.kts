@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.typedpath:schemact4:1.0.1-SNAPSHOT")
+    implementation("com.typedpath:schemact4:1.0.1-SNAPSHOT.01")
 }
 
 tasks.test {
