@@ -1,11 +1,8 @@
 version: 0.2
 phases:
-  install:
-    commands:
-      - n install 18
-      - node --version
   build:
     commands:
+      - node --version
       - echo "Lets go team paramicons  x"
       - gradle devparamicons_deployCode --stacktrace
       - echo "just did devparamicons_buildAndDeploy whats next"
