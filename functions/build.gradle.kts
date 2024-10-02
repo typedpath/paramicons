@@ -5,7 +5,7 @@ import paramicons.schemact.paramicons
 plugins {
     id("java")
     kotlin("jvm") version "1.7.10"
-    id("com.typedpath.schemact4.schemact-plugin") version "1.0.0"
+    id("com.typedpath.schemact4.schemact-plugin") version "1.0.1-SNAPSHOT"
 }
 
 val ktor_version: String by project
